@@ -233,9 +233,6 @@ private struct QuickPaySheet: View {
     @State private var paidDate = Date()
     @State private var paidAmount: Double
     @State private var note = ""
-    @State private var receiptItems: [PhotosPickerItem] = []
-    @State private var selectedPhotos: [UIImage] = []
-
     init(installment: Installment, vm: InstallmentViewModel, onDone: @escaping () -> Void) {
         self.installment = installment
         self.vm = vm
@@ -273,46 +270,6 @@ private struct QuickPaySheet: View {
                     .padding()
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
 
-                    // Receipt picker
-                    VStack(alignment: .leading, spacing: 10) {
-                        PhotosPicker(selection: $receiptItems, matching: .images) {
-                            Label(
-                                selectedPhotos.isEmpty
-                                    ? String(localized: "detail.add.receipt")
-                                    : String(format: String(localized: "quickpay.photos.selected"), selectedPhotos.count),
-                                systemImage: "paperclip"
-                            )
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .onChange(of: receiptItems) { _, items in
-                            Task {
-                                var images: [UIImage] = []
-                                for item in items {
-                                    if let data = try? await item.loadTransferable(type: Data.self),
-                                       let img = UIImage(data: data) {
-                                        images.append(img)
-                                    }
-                                }
-                                selectedPhotos = images
-                            }
-                        }
-
-                        if !selectedPhotos.isEmpty {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 8) {
-                                    ForEach(Array(selectedPhotos.enumerated()), id: \.offset) { _, img in
-                                        Image(uiImage: img)
-                                            .resizable().scaledToFill()
-                                            .frame(width: 64, height: 64)
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-
                     // Info (read-only)
                     VStack(spacing: 8) {
                         HStack {
@@ -339,16 +296,6 @@ private struct QuickPaySheet: View {
 
     private func save() {
         vm.markAsPaid(installment: installment, paidDate: paidDate, paidAmount: paidAmount, note: note.isEmpty ? nil : note)
-        if !selectedPhotos.isEmpty, let payment = installment.payment {
-            Task {
-                for img in selectedPhotos {
-                    let filename = ImageStorageService.newFilename()
-                    try? ImageStorageService.save(img, filename: filename)
-                    payment.receiptImageFilenames.append(filename)
-                }
-                try? payment.modelContext?.save()
-            }
-        }
         onDone()
     }
 }
