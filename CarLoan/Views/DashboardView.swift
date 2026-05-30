@@ -233,6 +233,9 @@ private struct QuickPaySheet: View {
     @State private var paidDate = Date()
     @State private var paidAmount: Double
     @State private var note = ""
+    @State private var receiptItems: [PhotosPickerItem] = []
+    @State private var receiptCount = 0
+
     init(installment: Installment, vm: InstallmentViewModel, onDone: @escaping () -> Void) {
         self.installment = installment
         self.vm = vm
@@ -270,6 +273,25 @@ private struct QuickPaySheet: View {
                     .padding()
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
 
+                    // Receipt button
+                    PhotosPicker(selection: $receiptItems, maxSelectionCount: 5, matching: .images) {
+                        HStack {
+                            Label(
+                                receiptCount == 0
+                                    ? String(localized: "detail.add.receipt")
+                                    : String(format: String(localized: "quickpay.photos.selected"), receiptCount),
+                                systemImage: receiptCount == 0 ? "paperclip" : "checkmark.circle.fill"
+                            )
+                            .foregroundStyle(receiptCount == 0 ? .blue : .green)
+                            Spacer()
+                        }
+                        .padding()
+                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    .onChange(of: receiptItems) { _, items in
+                        receiptCount = items.count
+                    }
+
                     // Info (read-only)
                     VStack(spacing: 8) {
                         HStack {
@@ -296,6 +318,11 @@ private struct QuickPaySheet: View {
 
     private func save() {
         vm.markAsPaid(installment: installment, paidDate: paidDate, paidAmount: paidAmount, note: note.isEmpty ? nil : note)
+        let items = receiptItems
         onDone()
+        // Attach receipts after payment exists (markAsPaid is synchronous)
+        if !items.isEmpty, let payment = installment.payment {
+            Task { await vm.attachReceipts(to: payment, items: items) }
+        }
     }
 }
