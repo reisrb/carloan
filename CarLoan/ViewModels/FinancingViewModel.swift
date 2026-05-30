@@ -104,6 +104,31 @@ final class FinancingViewModel {
         }
     }
 
+    func updateFinancing(
+        _ financing: Financing,
+        carName: String,
+        licensePlate: String,
+        bank: String,
+        vehicleValue: Double,
+        installmentAmount: Double,
+        carPhotoFilename: String?
+    ) {
+        financing.carName = carName
+        financing.licensePlate = licensePlate
+        financing.bank = bank
+        financing.vehicleValue = vehicleValue
+        if let photo = carPhotoFilename { financing.carPhotoFilename = photo }
+
+        // Update amount on all unpaid installments
+        if installmentAmount > 0 {
+            for inst in financing.installments where inst.payment == nil {
+                inst.amount = installmentAmount
+                inst.principalAmount = installmentAmount
+            }
+        }
+        try? context.save()
+    }
+
     func delete(_ financing: Financing) {
         context.delete(financing)
         try? context.save()

@@ -180,3 +180,11 @@
 "action.done" = "Concluir";
 "action.ok" = "OK";
 "action.delete" = "Excluir";
+
+// Edit financing
+"edit.title" = "Editar Financiamento";
+"edit.installment.value.unpaid" = "Valor da parcela (em aberto)";
+"edit.total.installments" = "Total de parcelas";
+"edit.paid.installments" = "Parcelas pagas";
+"dashboard.total.cost" = "Custo total do financiamento";
+"action.edit" = "Editar";

@@ -5,6 +5,8 @@ struct DashboardView: View {
     let financing: Financing
     @Environment(\.modelContext) private var context
 
+    @State private var showEdit = false
+
     // Quick pay state
     @State private var quickPayInstallment: Installment?
     @State private var showQuickPay = false
@@ -27,6 +29,8 @@ struct DashboardView: View {
         guard financing.totalInstallments > 0 else { return 0 }
         return Double(paidInstallments.count) / Double(financing.totalInstallments)
     }
+    private var totalAllInstallments: Double { totalPaid + totalRemaining }
+
     private var currentMonthInstallment: Installment? {
         financing.installments.first { $0.isCurrentMonth }
     }
@@ -61,18 +65,26 @@ struct DashboardView: View {
                 .padding()
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
 
-                // Original vehicle value
-                if financing.vehicleValue > 0 {
+                // Original value + total cost
+                VStack(spacing: 4) {
+                    if financing.vehicleValue > 0 {
+                        HStack {
+                            Text(String(localized: "dashboard.original.value"))
+                                .font(.subheadline).foregroundStyle(.secondary)
+                            Spacer()
+                            Text(financing.vehicleValue.currencyFormatted)
+                                .font(.subheadline.bold())
+                        }
+                    }
                     HStack {
-                        Text(String(localized: "dashboard.original.value"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                        Text(String(localized: "dashboard.total.cost"))
+                            .font(.subheadline).foregroundStyle(.secondary)
                         Spacer()
-                        Text(financing.vehicleValue.currencyFormatted)
+                        Text(totalAllInstallments.currencyFormatted)
                             .font(.subheadline.bold())
                     }
-                    .padding(.horizontal, 4)
                 }
+                .padding(.horizontal, 4)
 
                 // Amounts
                 HStack(spacing: 16) {
@@ -114,6 +126,16 @@ struct DashboardView: View {
         }
         .navigationTitle(financing.carName)
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(String(localized: "action.edit")) {
+                    showEdit = true
+                }
+            }
+        }
+        .sheet(isPresented: $showEdit) {
+            EditFinancingView(financing: financing)
+        }
         // Quick pay sheet
         .sheet(isPresented: $showQuickPay) {
             if let inst = quickPayInstallment {

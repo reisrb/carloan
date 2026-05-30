@@ -41,6 +41,7 @@
 // Dashboard
 "dashboard.vehicle.value" = "Vehicle value";
 "dashboard.original.value" = "Original value";
+"dashboard.total.cost" = "Total financing cost";
 "dashboard.this.month" = "This month";
 "dashboard.this.month.badge" = "This month";
 "dashboard.due.today" = "Due today";
@@ -176,7 +177,14 @@
 
 // Actions
 "action.cancel" = "Cancel";
+"action.edit" = "Edit";
 "action.save" = "Save";
 "action.done" = "Done";
 "action.ok" = "OK";
 "action.delete" = "Delete";
+
+// Edit financing
+"edit.title" = "Edit Financing";
+"edit.installment.value.unpaid" = "Installment value (unpaid)";
+"edit.total.installments" = "Total installments";
+"edit.paid.installments" = "Paid installments";
