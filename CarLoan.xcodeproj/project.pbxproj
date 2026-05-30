@@ -61,7 +61,7 @@
 		CE2A57392F215AB71A66631D /* EditFinancingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFinancingView.swift; sourceTree = "<group>"; };
 		CE951F0634E9C6AAEAC31327 /* LoanCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanCalculator.swift; sourceTree = "<group>"; };
 		E1541CE0706D05774070B871 /* InstallmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentDetailView.swift; sourceTree = "<group>"; };
-		E25F23F562E0BF8FAB5E5C15 /* CarLoan.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CarLoan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E25F23F562E0BF8FAB5E5C15 /* CarLoan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CarLoan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4D51F9C5ED8A3FB13A04E63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F26D442281F8C0705BE926A9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F2A6C76DC0AE70B41A86F73B /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
@@ -197,11 +197,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
-				TargetAttributes = {
-					F36FBCBA85F6F35527CC084C = {
-						DevelopmentTeam = "";
-					};
-				};
 			};
 			buildConfigurationList = C607ACB7E5B0D7598A8645D0 /* Build configuration list for PBXProject "CarLoan" */;
 			developmentRegion = en;
@@ -288,6 +283,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = CarLoan/CarLoan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8227DWMYJ8;
 				INFOPLIST_FILE = CarLoan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -426,6 +422,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = CarLoan/CarLoan.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8227DWMYJ8;
 				INFOPLIST_FILE = CarLoan/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

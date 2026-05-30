@@ -272,7 +272,24 @@ private struct QuickPaySheet: View {
     }
 
     var body: some View {
-        NavigationStack {
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Button(String(localized: "action.cancel")) { dismiss() }
+                Spacer()
+                Text(String(format: String(localized: "detail.title"), installment.number))
+                    .font(.headline)
+                Spacer()
+                Button(String(localized: "action.save")) {
+                    onConfirm(paidDate, paidAmount, note.isEmpty ? nil : note)
+                }
+                .bold()
+            }
+            .padding()
+            .background(.regularMaterial)
+
+            Divider()
+
             Form {
                 Section {
                     DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
@@ -284,18 +301,6 @@ private struct QuickPaySheet: View {
                     LabeledContent(String(localized: "detail.amount"), value: installment.amount.currencyFormatted)
                 }
                 .foregroundStyle(.secondary)
-            }
-            .navigationTitle(String(format: String(localized: "detail.title"), installment.number))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "action.cancel")) { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "action.save")) {
-                        onConfirm(paidDate, paidAmount, note.isEmpty ? nil : note)
-                    }
-                }
             }
         }
         .presentationDetents([.medium])
