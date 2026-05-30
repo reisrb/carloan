@@ -48,6 +48,7 @@
 "dashboard.receipt.prompt.title" = "Anexar comprovante?";
 "dashboard.receipt.prompt.body" = "Deseja anexar o comprovante desse pagamento?";
 "dashboard.receipt.now" = "Anexar agora";
+"quickpay.photos.selected" = "%d foto(s) selecionada(s)";
 "dashboard.receipt.later" = "Fazer depois";
 "dashboard.installments" = "parcelas";
 "dashboard.paid" = "Pago";

@@ -6,13 +6,8 @@ struct DashboardView: View {
     @Environment(\.modelContext) private var context
 
     @State private var showEdit = false
-
-    // Quick pay state
     @State private var quickPayInstallment: Installment?
     @State private var showQuickPay = false
-    @State private var showReceiptPrompt = false
-    @State private var receiptItems: [PhotosPickerItem] = []
-    @State private var lastPaidInstallment: Installment?
 
     private var vm: InstallmentViewModel { InstallmentViewModel(context: context) }
 
@@ -139,36 +134,10 @@ struct DashboardView: View {
         // Quick pay sheet
         .sheet(isPresented: $showQuickPay) {
             if let inst = quickPayInstallment {
-                QuickPaySheet(installment: inst) { date, amount, note in
-                    vm.markAsPaid(installment: inst, paidDate: date, paidAmount: amount, note: note)
-                    lastPaidInstallment = inst
+                QuickPaySheet(installment: inst, vm: vm) {
                     showQuickPay = false
-                    // Small delay so sheet dismisses before next prompt
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        showReceiptPrompt = true
-                    }
                 }
             }
-        }
-        // Receipt prompt after payment
-        .confirmationDialog(
-            String(localized: "dashboard.receipt.prompt.title"),
-            isPresented: $showReceiptPrompt,
-            titleVisibility: .visible
-        ) {
-            PhotosPicker(
-                String(localized: "dashboard.receipt.now"),
-                selection: $receiptItems,
-                matching: .images
-            )
-            Button(String(localized: "dashboard.receipt.later"), role: .cancel) {}
-        } message: {
-            Text(String(localized: "dashboard.receipt.prompt.body"))
-        }
-        .onChange(of: receiptItems) { _, items in
-            guard !items.isEmpty, let inst = lastPaidInstallment, let payment = inst.payment else { return }
-            Task { await vm.attachReceipts(to: payment, items: items) }
-            receiptItems = []
         }
     }
 
@@ -258,16 +227,19 @@ struct DashboardView: View {
 
 private struct QuickPaySheet: View {
     let installment: Installment
-    let onConfirm: (Date, Double, String?) -> Void
+    let vm: InstallmentViewModel
+    let onDone: () -> Void
 
-    @Environment(\.dismiss) private var dismiss
     @State private var paidDate = Date()
     @State private var paidAmount: Double
     @State private var note = ""
+    @State private var receiptItems: [PhotosPickerItem] = []
+    @State private var selectedPhotos: [UIImage] = []
 
-    init(installment: Installment, onConfirm: @escaping (Date, Double, String?) -> Void) {
+    init(installment: Installment, vm: InstallmentViewModel, onDone: @escaping () -> Void) {
         self.installment = installment
-        self.onConfirm = onConfirm
+        self.vm = vm
+        self.onDone = onDone
         _paidAmount = State(initialValue: installment.amount)
     }
 
@@ -275,15 +247,13 @@ private struct QuickPaySheet: View {
         VStack(spacing: 0) {
             // Header
             HStack {
-                Button(String(localized: "action.cancel")) { dismiss() }
+                Button(String(localized: "action.cancel")) { onDone() }
                 Spacer()
                 Text(String(format: String(localized: "detail.title"), installment.number))
                     .font(.headline)
                 Spacer()
-                Button(String(localized: "action.save")) {
-                    onConfirm(paidDate, paidAmount, note.isEmpty ? nil : note)
-                }
-                .bold()
+                Button(String(localized: "action.save")) { save() }
+                    .bold()
             }
             .padding()
             .background(.regularMaterial)
@@ -296,6 +266,44 @@ private struct QuickPaySheet: View {
                     CurrencyTextField(label: String(localized: "detail.paid.amount"), value: $paidAmount)
                     TextField(String(localized: "detail.note.optional"), text: $note)
                 }
+
+                // Receipt picker section
+                Section(String(localized: "detail.receipts")) {
+                    PhotosPicker(selection: $receiptItems, matching: .images, label: {
+                        Label(
+                            selectedPhotos.isEmpty
+                                ? String(localized: "detail.add.receipt")
+                                : String(format: String(localized: "quickpay.photos.selected"), selectedPhotos.count),
+                            systemImage: "paperclip"
+                        )
+                    })
+                    .onChange(of: receiptItems) { _, items in
+                        Task {
+                            var images: [UIImage] = []
+                            for item in items {
+                                if let data = try? await item.loadTransferable(type: Data.self),
+                                   let img = UIImage(data: data) {
+                                    images.append(img)
+                                }
+                            }
+                            selectedPhotos = images
+                        }
+                    }
+
+                    if !selectedPhotos.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(Array(selectedPhotos.enumerated()), id: \.offset) { _, img in
+                                    Image(uiImage: img)
+                                        .resizable().scaledToFill()
+                                        .frame(width: 64, height: 64)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                        }
+                    }
+                }
+
                 Section {
                     LabeledContent(String(localized: "detail.due.date"), value: installment.dueDate, format: .dateTime.day().month().year())
                     LabeledContent(String(localized: "detail.amount"), value: installment.amount.currencyFormatted)
@@ -303,6 +311,21 @@ private struct QuickPaySheet: View {
                 .foregroundStyle(.secondary)
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.large, .medium])
+    }
+
+    private func save() {
+        vm.markAsPaid(installment: installment, paidDate: paidDate, paidAmount: paidAmount, note: note.isEmpty ? nil : note)
+        if !selectedPhotos.isEmpty, let payment = installment.payment {
+            Task {
+                for img in selectedPhotos {
+                    let filename = ImageStorageService.newFilename()
+                    try? ImageStorageService.save(img, filename: filename)
+                    payment.receiptImageFilenames.append(filename)
+                }
+                try? payment.modelContext?.save()
+            }
+        }
+        onDone()
     }
 }
