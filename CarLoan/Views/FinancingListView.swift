@@ -4,11 +4,20 @@ import SwiftData
 struct FinancingListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Financing.createdAt, order: .reverse) private var financings: [Financing]
-    @State private var showAdd = false
-    @State private var showSettings = false
+
+    enum ActiveSheet: Identifiable {
+        case add, settings, share(URL)
+        var id: String {
+            switch self {
+            case .add: return "add"
+            case .settings: return "settings"
+            case .share(let url): return "share-\(url)"
+            }
+        }
+    }
+
+    @State private var activeSheet: ActiveSheet?
     @State private var showImportPicker = false
-    @State private var exportURL: URL?
-    @State private var showShareSheet = false
     @State private var showError = false
     @State private var errorMsg = ""
 
@@ -46,13 +55,13 @@ struct FinancingListView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { showAdd = true } label: {
+                    Button { activeSheet = .add } label: {
                         Image(systemName: "plus")
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
-                        Button { showSettings = true } label: {
+                        Button { activeSheet = .settings } label: {
                             Label(String(localized: "settings.title"), systemImage: "gear")
                         }
                         Button { showImportPicker = true } label: {
@@ -63,14 +72,14 @@ struct FinancingListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showAdd) {
-                AddFinancingView()
-            }
-            .sheet(isPresented: $showSettings) {
-                SettingsView()
-            }
-            .sheet(isPresented: $showShareSheet) {
-                if let url = exportURL {
+            // Single sheet for all presentations
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                case .add:
+                    AddFinancingView()
+                case .settings:
+                    SettingsView()
+                case .share(let url):
                     ShareSheet(items: [url])
                 }
             }
@@ -93,8 +102,6 @@ struct FinancingListView: View {
 
     private func exportFinancing(_ financing: Financing) {
         let safeName = financing.carName.replacingOccurrences(of: " ", with: "-")
-        // Serialize on main actor (SwiftData models are main-actor bound),
-        // then write to disk in background to avoid blocking UI
         guard let data = try? BackupService.export(financings: [financing]) else { return }
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("\(safeName)-carloan.json")
@@ -102,8 +109,7 @@ struct FinancingListView: View {
             await Task.detached(priority: .userInitiated) {
                 try? data.write(to: url)
             }.value
-            exportURL = url
-            showShareSheet = true
+            activeSheet = .share(url)
         }
     }
 
@@ -160,27 +166,21 @@ private struct FinancingRowView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
-                    Text(financing.carName)
-                        .font(.headline)
+                    Text(financing.carName).font(.headline)
                     if !financing.licensePlate.isEmpty {
                         Text(financing.licensePlate)
                             .font(.caption.bold())
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
+                            .padding(.horizontal, 6).padding(.vertical, 2)
                             .background(Color(.systemGray5), in: RoundedRectangle(cornerRadius: 4))
                             .foregroundStyle(.secondary)
                     }
                 }
                 if !financing.bank.isEmpty {
-                    Text(financing.bank)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                    Text(financing.bank).font(.subheadline).foregroundStyle(.secondary)
                 }
-                ProgressView(value: progress)
-                    .tint(.blue)
+                ProgressView(value: progress).tint(.blue)
                 Text("\(paid)/\(financing.totalInstallments) \(String(localized: "financing.row.installments"))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.caption).foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 4)
