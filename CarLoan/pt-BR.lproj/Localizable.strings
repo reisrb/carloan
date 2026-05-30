@@ -179,6 +179,8 @@
 "receipt.save" = "Salvar na Fototeca";
 "receipt.saved" = "Salvo";
 "receipt.save.error" = "Erro ao salvar";
+"action.export" = "Exportar";
+"action.import" = "Importar financiamento";
 "action.cancel" = "Cancelar";
 "action.save" = "Salvar";
 "action.done" = "Concluir";

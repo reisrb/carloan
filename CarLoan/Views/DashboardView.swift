@@ -119,9 +119,7 @@ struct DashboardView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(String(localized: "action.edit")) {
-                    showEdit = true
-                }
+                Button(String(localized: "action.edit")) { showEdit = true }
             }
         }
         .sheet(isPresented: $showEdit) {

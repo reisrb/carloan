@@ -180,6 +180,8 @@
 "receipt.save" = "Save to Photos";
 "receipt.saved" = "Saved";
 "receipt.save.error" = "Error saving";
+"action.export" = "Export";
+"action.import" = "Import financing";
 "action.cancel" = "Cancel";
 "action.edit" = "Edit";
 "action.save" = "Save";

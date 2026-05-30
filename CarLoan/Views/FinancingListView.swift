@@ -6,6 +6,11 @@ struct FinancingListView: View {
     @Query(sort: \Financing.createdAt, order: .reverse) private var financings: [Financing]
     @State private var showAdd = false
     @State private var showSettings = false
+    @State private var showImportPicker = false
+    @State private var exportURL: URL?
+    @State private var showShareSheet = false
+    @State private var showError = false
+    @State private var errorMsg = ""
 
     var body: some View {
         NavigationStack {
@@ -21,6 +26,14 @@ struct FinancingListView: View {
                         ForEach(financings) { financing in
                             NavigationLink(value: financing) {
                                 FinancingRowView(financing: financing)
+                            }
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    exportFinancing(financing)
+                                } label: {
+                                    Label(String(localized: "action.export"), systemImage: "square.and.arrow.up")
+                                }
+                                .tint(.blue)
                             }
                         }
                         .onDelete(perform: deleteFinancings)
@@ -38,8 +51,15 @@ struct FinancingListView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    Button { showSettings = true } label: {
-                        Image(systemName: "gear")
+                    Menu {
+                        Button { showSettings = true } label: {
+                            Label(String(localized: "settings.title"), systemImage: "gear")
+                        }
+                        Button { showImportPicker = true } label: {
+                            Label(String(localized: "action.import"), systemImage: "square.and.arrow.down")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }
@@ -49,6 +69,52 @@ struct FinancingListView: View {
             .sheet(isPresented: $showSettings) {
                 SettingsView()
             }
+            .sheet(isPresented: $showShareSheet) {
+                if let url = exportURL {
+                    ShareSheet(items: [url])
+                }
+            }
+            .fileImporter(isPresented: $showImportPicker, allowedContentTypes: [.json]) { result in
+                switch result {
+                case .success(let url):
+                    importFinancing(from: url)
+                case .failure(let err):
+                    errorMsg = err.localizedDescription
+                    showError = true
+                }
+            }
+            .alert(String(localized: "settings.error"), isPresented: $showError) {
+                Button(String(localized: "action.ok")) {}
+            } message: {
+                Text(errorMsg)
+            }
+        }
+    }
+
+    private func exportFinancing(_ financing: Financing) {
+        do {
+            let data = try BackupService.export(financings: [financing])
+            let safeName = financing.carName.replacingOccurrences(of: " ", with: "-")
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("\(safeName)-carloan.json")
+            try data.write(to: url)
+            exportURL = url
+            showShareSheet = true
+        } catch {
+            errorMsg = error.localizedDescription
+            showError = true
+        }
+    }
+
+    private func importFinancing(from url: URL) {
+        guard url.startAccessingSecurityScopedResource() else { return }
+        defer { url.stopAccessingSecurityScopedResource() }
+        do {
+            let data = try Data(contentsOf: url)
+            try BackupService.importBackup(data: data, context: context)
+        } catch {
+            errorMsg = error.localizedDescription
+            showError = true
         }
     }
 
@@ -74,7 +140,6 @@ private struct FinancingRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Car photo
             Group {
                 if let photo = carPhoto {
                     Image(uiImage: photo)
