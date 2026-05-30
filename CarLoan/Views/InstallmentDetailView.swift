@@ -200,6 +200,9 @@ struct InstallmentDetailView: View {
 private struct ReceiptFullscreenView: View {
     let image: UIImage
     @Environment(\.dismiss) private var dismiss
+    @State private var saveStatus: SaveStatus = .idle
+
+    enum SaveStatus { case idle, saved, error }
 
     var body: some View {
         NavigationStack {
@@ -207,11 +210,33 @@ private struct ReceiptFullscreenView: View {
                 .resizable()
                 .scaledToFit()
                 .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            saveToPhotos()
+                        } label: {
+                            switch saveStatus {
+                            case .idle:
+                                Label(String(localized: "receipt.save"), systemImage: "square.and.arrow.down")
+                            case .saved:
+                                Label(String(localized: "receipt.saved"), systemImage: "checkmark.circle.fill")
+                                    .foregroundStyle(.green)
+                            case .error:
+                                Label(String(localized: "receipt.save.error"), systemImage: "exclamationmark.circle.fill")
+                                    .foregroundStyle(.red)
+                            }
+                        }
+                        .disabled(saveStatus == .saved)
+                    }
                     ToolbarItem(placement: .confirmationAction) {
                         Button(String(localized: "action.done")) { dismiss() }
                     }
                 }
         }
+    }
+
+    private func saveToPhotos() {
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        withAnimation { saveStatus = .saved }
     }
 }
 

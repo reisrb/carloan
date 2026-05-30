@@ -176,6 +176,9 @@
 "notification.payoff.body" = "%@ foi totalmente quitado!";
 
 // Actions
+"receipt.save" = "Salvar na Fototeca";
+"receipt.saved" = "Salvo";
+"receipt.save.error" = "Erro ao salvar";
 "action.cancel" = "Cancelar";
 "action.save" = "Salvar";
 "action.done" = "Concluir";

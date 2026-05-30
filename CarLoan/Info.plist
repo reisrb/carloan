@@ -35,6 +35,8 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to attach payment receipts to installments.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Used to save receipt images to your photo library.</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Used to remind you before installment due dates.</string>
 </dict>

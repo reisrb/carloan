@@ -177,6 +177,9 @@
 "notification.payoff.body" = "%@ is fully paid off!";
 
 // Actions
+"receipt.save" = "Save to Photos";
+"receipt.saved" = "Saved";
+"receipt.save.error" = "Error saving";
 "action.cancel" = "Cancel";
 "action.edit" = "Edit";
 "action.save" = "Save";
