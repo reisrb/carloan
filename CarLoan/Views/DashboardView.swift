@@ -8,8 +8,7 @@ struct DashboardView: View {
     @State private var showEdit = false
     @State private var quickPayInstallment: Installment?
     @State private var showQuickPay = false
-
-    private var vm: InstallmentViewModel { InstallmentViewModel(context: context) }
+    @State private var vm: InstallmentViewModel?
 
     private var paidInstallments: [Installment] {
         financing.installments.filter { $0.payment != nil }
@@ -133,11 +132,15 @@ struct DashboardView: View {
         }
         // Quick pay sheet
         .sheet(isPresented: $showQuickPay) {
-            if let inst = quickPayInstallment {
+            if let inst = quickPayInstallment, let vm {
                 QuickPaySheet(installment: inst, vm: vm) {
                     showQuickPay = false
                 }
+                .background(Color(.systemBackground))
             }
+        }
+        .onAppear {
+            if vm == nil { vm = InstallmentViewModel(context: context) }
         }
     }
 
@@ -314,6 +317,7 @@ private struct QuickPaySheet: View {
             }
         }
         .presentationDetents([.large, .medium])
+        .presentationBackground(Color(.systemBackground))
     }
 
     private func save() {
