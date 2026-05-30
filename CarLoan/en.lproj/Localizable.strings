@@ -39,7 +39,15 @@
 "add.total.cost" = "Total cost";
 
 // Dashboard
+"dashboard.vehicle.value" = "Vehicle value";
 "dashboard.this.month" = "This month";
+"dashboard.this.month.badge" = "This month";
+"dashboard.due.today" = "Due today";
+"dashboard.quick.pay" = "Mark as paid";
+"dashboard.receipt.prompt.title" = "Attach receipt?";
+"dashboard.receipt.prompt.body" = "Do you want to attach a receipt for this payment?";
+"dashboard.receipt.now" = "Attach now";
+"dashboard.receipt.later" = "Later";
 "dashboard.installments" = "installments";
 "dashboard.paid" = "Paid";
 "dashboard.remaining" = "Remaining";

@@ -39,7 +39,15 @@
 "add.total.cost" = "Custo total";
 
 // Dashboard
+"dashboard.vehicle.value" = "Valor do veículo";
 "dashboard.this.month" = "Mês atual";
+"dashboard.this.month.badge" = "Mês atual";
+"dashboard.due.today" = "Vence hoje";
+"dashboard.quick.pay" = "Marcar como pago";
+"dashboard.receipt.prompt.title" = "Anexar comprovante?";
+"dashboard.receipt.prompt.body" = "Deseja anexar o comprovante desse pagamento?";
+"dashboard.receipt.now" = "Anexar agora";
+"dashboard.receipt.later" = "Fazer depois";
 "dashboard.installments" = "parcelas";
 "dashboard.paid" = "Pago";
 "dashboard.remaining" = "Restante";

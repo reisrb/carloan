@@ -1,8 +1,18 @@
 import SwiftUI
+import PhotosUI
 
 struct DashboardView: View {
     let financing: Financing
     @Environment(\.modelContext) private var context
+
+    // Quick pay state
+    @State private var quickPayInstallment: Installment?
+    @State private var showQuickPay = false
+    @State private var showReceiptPrompt = false
+    @State private var receiptItems: [PhotosPickerItem] = []
+    @State private var lastPaidInstallment: Installment?
+
+    private var vm: InstallmentViewModel { InstallmentViewModel(context: context) }
 
     private var paidInstallments: [Installment] {
         financing.installments.filter { $0.payment != nil }
@@ -20,9 +30,14 @@ struct DashboardView: View {
     private var currentMonthInstallment: Installment? {
         financing.installments.first { $0.isCurrentMonth }
     }
-    private var daysUntilNext: Int? {
-        guard let next = nextInstallment else { return nil }
-        return Calendar.current.dateComponents([.day], from: Date(), to: next.dueDate).day
+    private var featuredInstallment: Installment? {
+        // Prefer current month if unpaid, else next unpaid
+        if let current = currentMonthInstallment, current.payment == nil { return current }
+        return nextInstallment
+    }
+    private var daysUntilFeatured: Int? {
+        guard let inst = featuredInstallment else { return nil }
+        return Calendar.current.dateComponents([.day], from: Date(), to: inst.dueDate).day
     }
 
     var body: some View {
@@ -48,83 +63,25 @@ struct DashboardView: View {
 
                 // Amounts
                 HStack(spacing: 16) {
-                    amountCard(
-                        title: String(localized: "dashboard.paid"),
-                        value: totalPaid,
-                        color: .green
-                    )
-                    amountCard(
-                        title: String(localized: "dashboard.remaining"),
-                        value: totalRemaining,
-                        color: .orange
-                    )
+                    amountCard(title: String(localized: "dashboard.paid"), value: totalPaid, color: .green)
+                    amountCard(title: String(localized: "dashboard.remaining"), value: totalRemaining, color: .orange)
                 }
 
-                // Current month installment
-                if let current = currentMonthInstallment {
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text(String(localized: "dashboard.this.month"))
-                                .font(.headline)
-                            Spacer()
-                            Text(String(localized: "dashboard.installment") + " #\(current.number)")
-                                .font(.caption.bold())
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(.blue.opacity(0.15), in: Capsule())
-                                .foregroundStyle(.blue)
-                        }
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(current.dueDate, style: .date)
-                                    .foregroundStyle(.secondary)
-                                    .font(.caption)
-                                if current.payment != nil {
-                                    Label(String(localized: "status.paid"), systemImage: "checkmark.circle.fill")
-                                        .font(.caption)
-                                        .foregroundStyle(.green)
-                                }
-                            }
-                            Spacer()
-                            Text(current.amount.currencyFormatted)
-                                .font(.title3.bold())
-                                .foregroundStyle(current.payment != nil ? .green : .primary)
-                        }
+                // Vehicle value (if informed)
+                if financing.vehicleValue > 0 {
+                    HStack {
+                        Text(String(localized: "dashboard.vehicle.value"))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(financing.vehicleValue.currencyFormatted)
+                            .font(.subheadline.bold())
                     }
-                    .padding()
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal, 4)
                 }
 
-                // Next unpaid installment (if different from current month)
-                if let next = nextInstallment, !next.isCurrentMonth {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(String(localized: "dashboard.next.title"))
-                            .font(.headline)
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(String(localized: "dashboard.installment") + " #\(next.number)")
-                                    .font(.subheadline)
-                                Text(next.dueDate, style: .date)
-                                    .foregroundStyle(.secondary)
-                                    .font(.caption)
-                            }
-                            Spacer()
-                            VStack(alignment: .trailing) {
-                                Text(next.amount.currencyFormatted)
-                                    .font(.title3.bold())
-                                if let days = daysUntilNext {
-                                    Text(days >= 0
-                                         ? String(format: String(localized: "dashboard.days.left"), days)
-                                         : String(localized: "dashboard.overdue"))
-                                        .font(.caption)
-                                        .foregroundStyle(days < 0 ? .red : .secondary)
-                                }
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                }
+                // ── Quick pay card ──
+                quickPayCard
 
                 // Action buttons
                 VStack(spacing: 12) {
@@ -157,20 +114,170 @@ struct DashboardView: View {
         }
         .navigationTitle(financing.carName)
         .navigationBarTitleDisplayMode(.large)
+        // Quick pay sheet
+        .sheet(isPresented: $showQuickPay) {
+            if let inst = quickPayInstallment {
+                QuickPaySheet(installment: inst) { date, amount, note in
+                    vm.markAsPaid(installment: inst, paidDate: date, paidAmount: amount, note: note)
+                    lastPaidInstallment = inst
+                    showQuickPay = false
+                    // Small delay so sheet dismisses before next prompt
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        showReceiptPrompt = true
+                    }
+                }
+            }
+        }
+        // Receipt prompt after payment
+        .confirmationDialog(
+            String(localized: "dashboard.receipt.prompt.title"),
+            isPresented: $showReceiptPrompt,
+            titleVisibility: .visible
+        ) {
+            PhotosPicker(
+                String(localized: "dashboard.receipt.now"),
+                selection: $receiptItems,
+                matching: .images
+            )
+            Button(String(localized: "dashboard.receipt.later"), role: .cancel) {}
+        } message: {
+            Text(String(localized: "dashboard.receipt.prompt.body"))
+        }
+        .onChange(of: receiptItems) { _, items in
+            guard !items.isEmpty, let inst = lastPaidInstallment, let payment = inst.payment else { return }
+            Task { await vm.attachReceipts(to: payment, items: items) }
+            receiptItems = []
+        }
+    }
+
+    // MARK: - Quick pay card
+
+    @ViewBuilder
+    private var quickPayCard: some View {
+        if let inst = featuredInstallment {
+            VStack(alignment: .leading, spacing: 12) {
+                // Header
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 6) {
+                            Text(inst.isCurrentMonth
+                                 ? String(localized: "dashboard.this.month")
+                                 : String(localized: "dashboard.next.title"))
+                                .font(.headline)
+                            if inst.isCurrentMonth {
+                                Text(String(localized: "dashboard.this.month.badge"))
+                                    .font(.caption2.bold())
+                                    .padding(.horizontal, 6).padding(.vertical, 2)
+                                    .background(.blue.opacity(0.15), in: Capsule())
+                                    .foregroundStyle(.blue)
+                            }
+                        }
+                        Text(String(localized: "dashboard.installment") + " #\(inst.number)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(inst.amount.currencyFormatted)
+                            .font(.title2.bold())
+                        if let days = daysUntilFeatured {
+                            Text(days > 0
+                                 ? String(format: String(localized: "dashboard.days.left"), days)
+                                 : days == 0
+                                    ? String(localized: "dashboard.due.today")
+                                    : String(localized: "dashboard.overdue"))
+                                .font(.caption.bold())
+                                .foregroundStyle(days < 0 ? .red : days == 0 ? .orange : .secondary)
+                        }
+                    }
+                }
+
+                Text(inst.dueDate, style: .date)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                // Mark as paid button
+                if inst.payment == nil {
+                    Button {
+                        quickPayInstallment = inst
+                        showQuickPay = true
+                    } label: {
+                        Label(String(localized: "dashboard.quick.pay"), systemImage: "checkmark.circle.fill")
+                            .font(.subheadline.bold())
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(inst.status == .overdue ? .red : .blue)
+                } else {
+                    Label(String(localized: "status.paid"), systemImage: "checkmark.circle.fill")
+                        .font(.subheadline.bold())
+                        .foregroundStyle(.green)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        }
     }
 
     @ViewBuilder
     private func amountCard(title: String, value: Double, color: Color) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Text(value.currencyFormatted)
-                .font(.headline)
-                .foregroundStyle(color)
+            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(value.currencyFormatted).font(.headline).foregroundStyle(color)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+    }
+}
+
+// MARK: - Quick pay sheet
+
+private struct QuickPaySheet: View {
+    let installment: Installment
+    let onConfirm: (Date, Double, String?) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var paidDate = Date()
+    @State private var paidAmountText: String
+    @State private var note = ""
+
+    init(installment: Installment, onConfirm: @escaping (Date, Double, String?) -> Void) {
+        self.installment = installment
+        self.onConfirm = onConfirm
+        _paidAmountText = State(initialValue: String(format: "%.2f", installment.amount))
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
+                    TextField(String(localized: "detail.paid.amount"), text: $paidAmountText)
+                        .keyboardType(.decimalPad)
+                    TextField(String(localized: "detail.note.optional"), text: $note)
+                }
+                Section {
+                    LabeledContent(String(localized: "detail.due.date"), value: installment.dueDate, format: .dateTime.day().month().year())
+                    LabeledContent(String(localized: "detail.amount"), value: installment.amount.currencyFormatted)
+                }
+                .foregroundStyle(.secondary)
+            }
+            .navigationTitle(String(format: String(localized: "detail.title"), installment.number))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(String(localized: "action.cancel")) { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(String(localized: "action.save")) {
+                        let amount = Double(paidAmountText.replacingOccurrences(of: ",", with: ".")) ?? installment.amount
+                        onConfirm(paidDate, amount, note.isEmpty ? nil : note)
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium])
     }
 }
