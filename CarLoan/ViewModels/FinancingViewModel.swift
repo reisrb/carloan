@@ -12,21 +12,25 @@ final class FinancingViewModel {
 
     func createFinancing(
         carName: String,
+        licensePlate: String,
         bank: String,
         vehicleValue: Double,
         downPayment: Double,
         monthlyRate: Double,
         totalInstallments: Int,
-        firstDueDate: Date
+        firstDueDate: Date,
+        carPhotoFilename: String?
     ) {
         let financing = Financing(
             carName: carName,
+            licensePlate: licensePlate,
             bank: bank,
             vehicleValue: vehicleValue,
             downPayment: downPayment,
             monthlyRate: monthlyRate,
             totalInstallments: totalInstallments,
-            firstDueDate: firstDueDate
+            firstDueDate: firstDueDate,
+            carPhotoFilename: carPhotoFilename
         )
         context.insert(financing)
 

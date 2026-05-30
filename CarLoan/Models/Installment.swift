@@ -13,6 +13,10 @@ final class Installment {
     @Relationship(deleteRule: .cascade, inverse: \Payment.installment)
     var payment: Payment?
 
+    var isCurrentMonth: Bool {
+        Calendar.current.isDate(dueDate, equalTo: Date(), toGranularity: .month)
+    }
+
     var status: InstallmentStatus {
         guard payment == nil else { return .paid }
         return dueDate < Date() ? .overdue : .open

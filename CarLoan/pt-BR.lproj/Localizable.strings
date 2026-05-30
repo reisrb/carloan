@@ -14,10 +14,16 @@
 "add.section.values" = "Valores";
 "add.section.term" = "Prazo";
 "add.section.summary" = "Resumo";
+"add.car.photo" = "Foto do carro";
+"add.car.photo.hint" = "Opcional";
 "add.car.name" = "Nome / modelo do carro";
+"add.license.plate" = "Placa (opcional)";
 "add.bank" = "Banco / financeira";
 "add.vehicle.value" = "Valor do veículo";
 "add.down.payment" = "Entrada";
+"add.down.payment.optional" = "Entrada (opcional)";
+"add.monthly.rate.optional" = "Taxa mensal % (opcional)";
+"add.monthly.rate.zero.hint" = "0% = parcelas iguais sem juros";
 "add.monthly.rate" = "Taxa mensal (%)";
 "add.total.installments" = "Número de parcelas";
 "add.first.due.date" = "Vencimento da 1ª parcela";
@@ -26,6 +32,7 @@
 "add.total.cost" = "Custo total";
 
 // Dashboard
+"dashboard.this.month" = "Mês atual";
 "dashboard.installments" = "parcelas";
 "dashboard.paid" = "Pago";
 "dashboard.remaining" = "Restante";
@@ -100,13 +107,29 @@
 
 // Simulation
 "simulation.title" = "Antecipação";
-"simulation.from" = "Quitar a partir da parcela";
-"simulation.installment" = "Parcela #%d";
+"simulation.quick.select" = "Seleção rápida";
+"simulation.preset.last" = "Última";
+"simulation.preset.next2" = "Próximas 2";
+"simulation.preset.next3" = "Próximas 3";
+"simulation.preset.next6" = "Próximas 6";
+"simulation.preset.all" = "Todas";
+"simulation.preset.clear" = "Limpar";
+"simulation.select.installments" = "Selecionar parcelas";
+"simulation.mode.label" = "Modo";
+"simulation.mode.term" = "Reduzir prazo";
+"simulation.mode.payment" = "Reduzir prestação";
+"simulation.current.month" = "Mês atual";
+"simulation.principal.label" = "amortização";
 "simulation.result" = "Resultado";
-"simulation.installments.count" = "Parcelas a pagar";
-"simulation.total.to.pay" = "Total a pagar agora";
-"simulation.interest.saved" = "Juros economizados";
-"simulation.payoff.date" = "Data de quitação";
+"simulation.selected.count" = "Parcelas selecionadas";
+"simulation.total.to.pay" = "A pagar agora (só amortização)";
+"simulation.interest.skipped" = "Juros que você pula";
+"simulation.interest.saved" = "Total de juros economizados";
+"simulation.new.count" = "Parcelas restantes";
+"simulation.payoff.date" = "Nova data de quitação";
+"simulation.new.monthly" = "Nova prestação mensal";
+"simulation.saving.per.month" = "Economia por mês";
+"simulation.installment" = "Parcela #%d";
 "simulation.normal.total" = "Total normal";
 "simulation.saving" = "Sua economia";
 
@@ -121,6 +144,12 @@
 "settings.export" = "Exportar backup (JSON)";
 "settings.import" = "Importar backup";
 "settings.error" = "Erro";
+
+// Notification permission request
+"notif.request.title" = "Ativar lembretes de pagamento";
+"notif.request.body" = "O CarLoan pode te notificar antes do vencimento de cada parcela para você não perder nenhum pagamento.";
+"notif.request.enable" = "Ativar";
+"notif.request.later" = "Agora não";
 
 // Notifications
 "notification.title" = "Parcela próxima do vencimento";

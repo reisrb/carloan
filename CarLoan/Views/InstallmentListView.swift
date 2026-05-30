@@ -66,8 +66,18 @@ private struct InstallmentRowView: View {
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(String(format: String(localized: "installments.row.number"), installment.number))
-                    .font(.subheadline.bold())
+                HStack(spacing: 6) {
+                    Text(String(format: String(localized: "installments.row.number"), installment.number))
+                        .font(.subheadline.bold())
+                    if installment.isCurrentMonth {
+                        Text(String(localized: "dashboard.this.month"))
+                            .font(.caption2.bold())
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(.blue.opacity(0.15), in: Capsule())
+                            .foregroundStyle(.blue)
+                    }
+                }
                 Text(installment.dueDate, style: .date)
                     .font(.caption)
                     .foregroundStyle(.secondary)

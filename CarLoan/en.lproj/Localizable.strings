@@ -14,10 +14,16 @@
 "add.section.values" = "Amounts";
 "add.section.term" = "Term";
 "add.section.summary" = "Summary";
+"add.car.photo" = "Car photo";
+"add.car.photo.hint" = "Optional";
 "add.car.name" = "Car name / model";
+"add.license.plate" = "License plate (optional)";
 "add.bank" = "Bank / lender";
 "add.vehicle.value" = "Vehicle value";
 "add.down.payment" = "Down payment";
+"add.down.payment.optional" = "Down payment (optional)";
+"add.monthly.rate.optional" = "Monthly rate % (optional)";
+"add.monthly.rate.zero.hint" = "0% = equal installments";
 "add.monthly.rate" = "Monthly rate (%)";
 "add.total.installments" = "Number of installments";
 "add.first.due.date" = "First due date";
@@ -26,6 +32,7 @@
 "add.total.cost" = "Total cost";
 
 // Dashboard
+"dashboard.this.month" = "This month";
 "dashboard.installments" = "installments";
 "dashboard.paid" = "Paid";
 "dashboard.remaining" = "Remaining";
@@ -100,13 +107,29 @@
 
 // Simulation
 "simulation.title" = "Early Payoff";
-"simulation.from" = "Pay off from installment";
-"simulation.installment" = "Installment #%d";
+"simulation.quick.select" = "Quick select";
+"simulation.preset.last" = "Last";
+"simulation.preset.next2" = "Next 2";
+"simulation.preset.next3" = "Next 3";
+"simulation.preset.next6" = "Next 6";
+"simulation.preset.all" = "All";
+"simulation.preset.clear" = "Clear";
+"simulation.select.installments" = "Select installments";
+"simulation.mode.label" = "Mode";
+"simulation.mode.term" = "Reduce term";
+"simulation.mode.payment" = "Reduce monthly";
+"simulation.current.month" = "This month";
+"simulation.principal.label" = "principal";
 "simulation.result" = "Result";
-"simulation.installments.count" = "Installments to pay";
-"simulation.total.to.pay" = "Total to pay now";
-"simulation.interest.saved" = "Interest saved";
-"simulation.payoff.date" = "Payoff date";
+"simulation.selected.count" = "Installments selected";
+"simulation.total.to.pay" = "To pay now (principal only)";
+"simulation.interest.skipped" = "Interest you skip";
+"simulation.interest.saved" = "Total interest saved";
+"simulation.new.count" = "Remaining installments";
+"simulation.payoff.date" = "New payoff date";
+"simulation.new.monthly" = "New monthly payment";
+"simulation.saving.per.month" = "Saving per month";
+"simulation.installment" = "Installment #%d";
 "simulation.normal.total" = "Normal total";
 "simulation.saving" = "Your saving";
 
@@ -121,6 +144,12 @@
 "settings.export" = "Export backup (JSON)";
 "settings.import" = "Import backup";
 "settings.error" = "Error";
+
+// Notification permission request
+"notif.request.title" = "Enable payment reminders";
+"notif.request.body" = "CarLoan can notify you before each installment is due so you never miss a payment.";
+"notif.request.enable" = "Enable";
+"notif.request.later" = "Maybe later";
 
 // Notifications
 "notification.title" = "Installment due soon";

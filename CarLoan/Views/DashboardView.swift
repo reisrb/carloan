@@ -17,6 +17,9 @@ struct DashboardView: View {
         guard financing.totalInstallments > 0 else { return 0 }
         return Double(paidInstallments.count) / Double(financing.totalInstallments)
     }
+    private var currentMonthInstallment: Installment? {
+        financing.installments.first { $0.isCurrentMonth }
+    }
     private var daysUntilNext: Int? {
         guard let next = nextInstallment else { return nil }
         return Calendar.current.dateComponents([.day], from: Date(), to: next.dueDate).day
@@ -57,8 +60,43 @@ struct DashboardView: View {
                     )
                 }
 
-                // Next installment
-                if let next = nextInstallment {
+                // Current month installment
+                if let current = currentMonthInstallment {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(String(localized: "dashboard.this.month"))
+                                .font(.headline)
+                            Spacer()
+                            Text(String(localized: "dashboard.installment") + " #\(current.number)")
+                                .font(.caption.bold())
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(.blue.opacity(0.15), in: Capsule())
+                                .foregroundStyle(.blue)
+                        }
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(current.dueDate, style: .date)
+                                    .foregroundStyle(.secondary)
+                                    .font(.caption)
+                                if current.payment != nil {
+                                    Label(String(localized: "status.paid"), systemImage: "checkmark.circle.fill")
+                                        .font(.caption)
+                                        .foregroundStyle(.green)
+                                }
+                            }
+                            Spacer()
+                            Text(current.amount.currencyFormatted)
+                                .font(.title3.bold())
+                                .foregroundStyle(current.payment != nil ? .green : .primary)
+                        }
+                    }
+                    .padding()
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+                }
+
+                // Next unpaid installment (if different from current month)
+                if let next = nextInstallment, !next.isCurrentMonth {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(String(localized: "dashboard.next.title"))
                             .font(.headline)

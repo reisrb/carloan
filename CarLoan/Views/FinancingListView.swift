@@ -68,19 +68,54 @@ private struct FinancingRowView: View {
         guard financing.totalInstallments > 0 else { return 0 }
         return Double(paid) / Double(financing.totalInstallments)
     }
+    private var carPhoto: UIImage? {
+        financing.carPhotoFilename.flatMap { ImageStorageService.load(filename: $0) }
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(financing.carName)
-                .font(.headline)
-            Text(financing.bank)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            ProgressView(value: progress)
-                .tint(.blue)
-            Text("\(paid)/\(financing.totalInstallments) \(String(localized: "financing.row.installments"))")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        HStack(spacing: 12) {
+            // Car photo
+            Group {
+                if let photo = carPhoto {
+                    Image(uiImage: photo)
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    ZStack {
+                        Color(.systemGray5)
+                        Image(systemName: "car.fill")
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .frame(width: 64, height: 64)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 6) {
+                    Text(financing.carName)
+                        .font(.headline)
+                    if !financing.licensePlate.isEmpty {
+                        Text(financing.licensePlate)
+                            .font(.caption.bold())
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color(.systemGray5), in: RoundedRectangle(cornerRadius: 4))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                if !financing.bank.isEmpty {
+                    Text(financing.bank)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                ProgressView(value: progress)
+                    .tint(.blue)
+                Text("\(paid)/\(financing.totalInstallments) \(String(localized: "financing.row.installments"))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(.vertical, 4)
     }
