@@ -1,14 +1,11 @@
 import SwiftUI
-import PhotosUI
 
 struct DashboardView: View {
     let financing: Financing
     @Environment(\.modelContext) private var context
 
     @State private var showEdit = false
-    @State private var quickPayInstallment: Installment?
-    @State private var showQuickPay = false
-    @State private var vm: InstallmentViewModel?
+    @State private var selectedInstallment: Installment?
 
     private var paidInstallments: [Installment] {
         financing.installments.filter { $0.payment != nil }
@@ -130,17 +127,8 @@ struct DashboardView: View {
         .sheet(isPresented: $showEdit) {
             EditFinancingView(financing: financing)
         }
-        // Quick pay sheet
-        .sheet(isPresented: $showQuickPay) {
-            if let inst = quickPayInstallment, let vm {
-                QuickPaySheet(installment: inst, vm: vm) {
-                    showQuickPay = false
-                }
-                .background(Color(.systemBackground))
-            }
-        }
-        .onAppear {
-            if vm == nil { vm = InstallmentViewModel(context: context) }
+        .sheet(item: $selectedInstallment) { inst in
+            InstallmentDetailView(installment: inst)
         }
     }
 
@@ -193,8 +181,7 @@ struct DashboardView: View {
                 // Mark as paid button
                 if inst.payment == nil {
                     Button {
-                        quickPayInstallment = inst
-                        showQuickPay = true
+                        selectedInstallment = inst
                     } label: {
                         Label(String(localized: "dashboard.quick.pay"), systemImage: "checkmark.circle.fill")
                             .font(.subheadline.bold())
@@ -226,107 +213,3 @@ struct DashboardView: View {
     }
 }
 
-// MARK: - Quick pay sheet
-
-private struct QuickPaySheet: View {
-    let installment: Installment
-    let vm: InstallmentViewModel
-    let onDone: () -> Void
-
-    @State private var paidDate = Date()
-    @State private var paidAmount: Double
-    @State private var note = ""
-    @State private var receiptItems: [PhotosPickerItem] = []
-    @State private var receiptCount = 0
-
-    init(installment: Installment, vm: InstallmentViewModel, onDone: @escaping () -> Void) {
-        self.installment = installment
-        self.vm = vm
-        self.onDone = onDone
-        _paidAmount = State(initialValue: installment.amount)
-    }
-
-    var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            HStack {
-                Button(String(localized: "action.cancel")) { onDone() }
-                Spacer()
-                Text(String(format: String(localized: "detail.title"), installment.number))
-                    .font(.headline)
-                Spacer()
-                Button(String(localized: "action.save")) { save() }
-                    .bold()
-            }
-            .padding()
-            .background(.regularMaterial)
-
-            Divider()
-
-            ScrollView {
-                VStack(spacing: 16) {
-                    // Payment info
-                    VStack(alignment: .leading, spacing: 12) {
-                        DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
-                        Divider()
-                        CurrencyTextField(label: String(localized: "detail.paid.amount"), value: $paidAmount)
-                        Divider()
-                        TextField(String(localized: "detail.note.optional"), text: $note)
-                    }
-                    .padding()
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-
-                    // Receipt button
-                    PhotosPicker(selection: $receiptItems, maxSelectionCount: 5, matching: .images) {
-                        HStack {
-                            Label(
-                                receiptCount == 0
-                                    ? String(localized: "detail.add.receipt")
-                                    : String(format: String(localized: "quickpay.photos.selected"), receiptCount),
-                                systemImage: receiptCount == 0 ? "paperclip" : "checkmark.circle.fill"
-                            )
-                            .foregroundStyle(receiptCount == 0 ? .blue : .green)
-                            Spacer()
-                        }
-                        .padding()
-                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                    }
-                    .onChange(of: receiptItems) { _, items in
-                        receiptCount = items.count
-                    }
-
-                    // Info (read-only)
-                    VStack(spacing: 8) {
-                        HStack {
-                            Text(String(localized: "detail.due.date")).foregroundStyle(.secondary)
-                            Spacer()
-                            Text(installment.dueDate, style: .date)
-                        }
-                        Divider()
-                        HStack {
-                            Text(String(localized: "detail.amount")).foregroundStyle(.secondary)
-                            Spacer()
-                            Text(installment.amount.currencyFormatted)
-                        }
-                    }
-                    .font(.subheadline)
-                    .padding()
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                }
-                .padding()
-            }
-        }
-        .presentationDetents([.large, .medium])
-        .presentationBackground(Color(.systemBackground))
-    }
-
-    private func save() {
-        vm.markAsPaid(installment: installment, paidDate: paidDate, paidAmount: paidAmount, note: note.isEmpty ? nil : note)
-        let items = receiptItems
-        onDone()
-        // Attach receipts after payment exists (markAsPaid is synchronous)
-        if !items.isEmpty, let payment = installment.payment {
-            Task { await vm.attachReceipts(to: payment, items: items) }
-        }
-    }
-}
