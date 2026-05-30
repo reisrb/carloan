@@ -24,6 +24,7 @@ enum BackupService {
     struct BackupFinancing: Codable {
         let id: String
         let carName: String
+        let licensePlate: String
         let bank: String
         let vehicleValue: Double
         let downPayment: Double
@@ -31,6 +32,7 @@ enum BackupService {
         let totalInstallments: Int
         let firstDueDate: Date
         let createdAt: Date
+        let carPhotoBase64: String?
         let installments: [BackupInstallment]
     }
 
@@ -47,6 +49,7 @@ enum BackupService {
             BackupFinancing(
                 id: f.id.uuidString,
                 carName: f.carName,
+                licensePlate: f.licensePlate,
                 bank: f.bank,
                 vehicleValue: f.vehicleValue,
                 downPayment: f.downPayment,
@@ -54,6 +57,7 @@ enum BackupService {
                 totalInstallments: f.totalInstallments,
                 firstDueDate: f.firstDueDate,
                 createdAt: f.createdAt,
+                carPhotoBase64: f.carPhotoFilename.flatMap { ImageStorageService.loadBase64(filename: $0) },
                 installments: f.installments.sorted { $0.number < $1.number }.map { i in
                     var receipts: [String: String] = [:]
                     if let p = i.payment {
@@ -98,14 +102,22 @@ enum BackupService {
         let backup = try decoder.decode(BackupFile.self, from: data)
 
         for bf in backup.financings {
+            var photoFilename: String? = nil
+            if let b64 = bf.carPhotoBase64 {
+                let filename = ImageStorageService.newFilename()
+                try? ImageStorageService.saveFromBase64(b64, filename: filename)
+                photoFilename = filename
+            }
             let financing = Financing(
                 carName: bf.carName,
+                licensePlate: bf.licensePlate,
                 bank: bf.bank,
                 vehicleValue: bf.vehicleValue,
                 downPayment: bf.downPayment,
                 monthlyRate: bf.monthlyRate,
                 totalInstallments: bf.totalInstallments,
-                firstDueDate: bf.firstDueDate
+                firstDueDate: bf.firstDueDate,
+                carPhotoFilename: photoFilename
             )
             context.insert(financing)
 
