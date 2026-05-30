@@ -260,55 +260,78 @@ private struct QuickPaySheet: View {
 
             Divider()
 
-            Form {
-                Section {
-                    DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
-                    CurrencyTextField(label: String(localized: "detail.paid.amount"), value: $paidAmount)
-                    TextField(String(localized: "detail.note.optional"), text: $note)
-                }
-
-                // Receipt picker section
-                Section(String(localized: "detail.receipts")) {
-                    PhotosPicker(selection: $receiptItems, matching: .images, label: {
-                        Label(
-                            selectedPhotos.isEmpty
-                                ? String(localized: "detail.add.receipt")
-                                : String(format: String(localized: "quickpay.photos.selected"), selectedPhotos.count),
-                            systemImage: "paperclip"
-                        )
-                    })
-                    .onChange(of: receiptItems) { _, items in
-                        Task {
-                            var images: [UIImage] = []
-                            for item in items {
-                                if let data = try? await item.loadTransferable(type: Data.self),
-                                   let img = UIImage(data: data) {
-                                    images.append(img)
-                                }
-                            }
-                            selectedPhotos = images
-                        }
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Payment info
+                    VStack(alignment: .leading, spacing: 12) {
+                        DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
+                        Divider()
+                        CurrencyTextField(label: String(localized: "detail.paid.amount"), value: $paidAmount)
+                        Divider()
+                        TextField(String(localized: "detail.note.optional"), text: $note)
                     }
+                    .padding()
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
 
-                    if !selectedPhotos.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach(Array(selectedPhotos.enumerated()), id: \.offset) { _, img in
-                                    Image(uiImage: img)
-                                        .resizable().scaledToFill()
-                                        .frame(width: 64, height: 64)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    // Receipt picker
+                    VStack(alignment: .leading, spacing: 10) {
+                        PhotosPicker(selection: $receiptItems, matching: .images) {
+                            Label(
+                                selectedPhotos.isEmpty
+                                    ? String(localized: "detail.add.receipt")
+                                    : String(format: String(localized: "quickpay.photos.selected"), selectedPhotos.count),
+                                systemImage: "paperclip"
+                            )
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .onChange(of: receiptItems) { _, items in
+                            Task {
+                                var images: [UIImage] = []
+                                for item in items {
+                                    if let data = try? await item.loadTransferable(type: Data.self),
+                                       let img = UIImage(data: data) {
+                                        images.append(img)
+                                    }
                                 }
+                                selectedPhotos = images
                             }
                         }
-                    }
-                }
 
-                Section {
-                    LabeledContent(String(localized: "detail.due.date"), value: installment.dueDate, format: .dateTime.day().month().year())
-                    LabeledContent(String(localized: "detail.amount"), value: installment.amount.currencyFormatted)
+                        if !selectedPhotos.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(Array(selectedPhotos.enumerated()), id: \.offset) { _, img in
+                                        Image(uiImage: img)
+                                            .resizable().scaledToFill()
+                                            .frame(width: 64, height: 64)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+
+                    // Info (read-only)
+                    VStack(spacing: 8) {
+                        HStack {
+                            Text(String(localized: "detail.due.date")).foregroundStyle(.secondary)
+                            Spacer()
+                            Text(installment.dueDate, style: .date)
+                        }
+                        Divider()
+                        HStack {
+                            Text(String(localized: "detail.amount")).foregroundStyle(.secondary)
+                            Spacer()
+                            Text(installment.amount.currencyFormatted)
+                        }
+                    }
+                    .font(.subheadline)
+                    .padding()
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
                 }
-                .foregroundStyle(.secondary)
+                .padding()
             }
         }
         .presentationDetents([.large, .medium])
