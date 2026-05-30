@@ -11,15 +11,22 @@
 // Add financing
 "add.title" = "Novo Financiamento";
 "add.section.vehicle" = "Veículo";
+"add.section.financing" = "Financiamento";
 "add.section.values" = "Valores";
 "add.section.term" = "Prazo";
 "add.section.summary" = "Resumo";
+"add.advanced" = "Opções avançadas";
 "add.car.photo" = "Foto do carro";
 "add.car.photo.hint" = "Opcional";
 "add.car.name" = "Nome / modelo do carro";
 "add.license.plate" = "Placa (opcional)";
 "add.bank" = "Banco / financeira";
 "add.vehicle.value" = "Valor do veículo";
+"add.vehicle.value.optional" = "Valor total do veículo (opcional)";
+"add.installment.value" = "Valor da parcela";
+"add.already.paid" = "Já pagas: %d";
+"add.already.paid.amount" = "Já pago (total)";
+"add.remaining.amount" = "Restante a pagar";
 "add.down.payment" = "Entrada";
 "add.down.payment.optional" = "Entrada (opcional)";
 "add.monthly.rate.optional" = "Taxa mensal % (opcional)";

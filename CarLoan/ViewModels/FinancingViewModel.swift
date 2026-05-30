@@ -10,6 +10,10 @@ final class FinancingViewModel {
         self.context = context
     }
 
+    /// Primary creation path: user inputs installment amount directly.
+    /// - Parameters:
+    ///   - installmentAmount: Fixed monthly payment (PMT). If 0, calculated from vehicleValue/monthlyRate.
+    ///   - alreadyPaidCount: Pre-mark first N installments as paid (user already paid them before adding to app).
     func createFinancing(
         carName: String,
         licensePlate: String,
@@ -17,8 +21,10 @@ final class FinancingViewModel {
         vehicleValue: Double,
         downPayment: Double,
         monthlyRate: Double,
+        installmentAmount: Double,
         totalInstallments: Int,
         firstDueDate: Date,
+        alreadyPaidCount: Int,
         carPhotoFilename: String?
     ) {
         let financing = Financing(
@@ -34,12 +40,26 @@ final class FinancingViewModel {
         )
         context.insert(financing)
 
-        let rows = LoanCalculator.priceTable(
-            financedAmount: financing.financedAmount,
-            monthlyRate: monthlyRate,
-            totalInstallments: totalInstallments,
-            firstDueDate: firstDueDate
-        )
+        // Derive financedAmount: prefer vehicleValue - downPayment if > 0,
+        // otherwise use installmentAmount * n (for contracts without known vehicle price)
+        let financed = vehicleValue > 0
+            ? max(0, vehicleValue - downPayment)
+            : installmentAmount * Double(totalInstallments)
+
+        let rows: [LoanCalculator.InstallmentRow]
+        if installmentAmount > 0 && monthlyRate == 0 {
+            // Flat installments — user knows the PMT, no rate
+            rows = flatInstallments(amount: installmentAmount, count: totalInstallments, firstDueDate: firstDueDate)
+        } else {
+            rows = LoanCalculator.priceTable(
+                financedAmount: financed,
+                monthlyRate: monthlyRate,
+                totalInstallments: totalInstallments,
+                firstDueDate: firstDueDate
+            )
+        }
+
+        let calendar = Calendar.current
         for row in rows {
             let inst = Installment(
                 number: row.number,
@@ -52,9 +72,36 @@ final class FinancingViewModel {
             inst.financing = financing
             financing.installments.append(inst)
             context.insert(inst)
+
+            // Pre-mark already-paid installments
+            if row.number <= alreadyPaidCount {
+                let estimatedPaidDate = calendar.date(
+                    byAdding: .month, value: row.number - 1, to: firstDueDate
+                ) ?? row.dueDate
+                let payment = Payment(paidDate: estimatedPaidDate, paidAmount: row.amount)
+                payment.installment = inst
+                inst.payment = payment
+                context.insert(payment)
+            }
         }
 
         try? context.save()
+    }
+
+    private func flatInstallments(amount: Double, count: Int, firstDueDate: Date) -> [LoanCalculator.InstallmentRow] {
+        let calendar = Calendar.current
+        return (1...count).map { k in
+            let dueDate = calendar.date(byAdding: .month, value: k - 1, to: firstDueDate) ?? firstDueDate
+            let remaining = amount * Double(count - k)
+            return LoanCalculator.InstallmentRow(
+                number: k,
+                dueDate: dueDate,
+                amount: amount,
+                principalAmount: amount,
+                interestAmount: 0,
+                remainingBalance: remaining
+            )
+        }
     }
 
     func delete(_ financing: Financing) {

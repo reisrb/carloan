@@ -5,42 +5,45 @@ struct AddFinancingView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
+    // Car info
     @State private var carName = ""
     @State private var licensePlate = ""
     @State private var bank = ""
-    @State private var vehicleValue = ""
-    @State private var downPayment = ""
-    @State private var monthlyRatePercent = ""
-    @State private var totalInstallments = ""
-    @State private var firstDueDate = Calendar.current.date(byAdding: .month, value: 1, to: Date()) ?? Date()
     @State private var photoItem: PhotosPickerItem?
     @State private var carPhoto: UIImage?
     @State private var savedPhotoFilename: String?
 
+    // Financing core
+    @State private var vehicleValue = ""
+    @State private var installmentValue = ""
+    @State private var totalInstallments = ""
+    @State private var alreadyPaid = 0
+    @State private var firstDueDate = Calendar.current.date(byAdding: .month, value: 1, to: Date()) ?? Date()
+
+    // Advanced (optional)
+    @State private var showAdvanced = false
+    @State private var downPayment = ""
+    @State private var monthlyRatePercent = ""
+
+    private var instAmount: Double { doubleValue(installmentValue) }
+    private var total: Int { intValue(totalInstallments) }
+    private var rate: Double { doubleValue(monthlyRatePercent) / 100 }
+
     private var isValid: Bool {
-        !carName.isEmpty
-        && doubleValue(vehicleValue) > 0
-        && intValue(totalInstallments) > 0
-        && doubleValue(downPayment) < doubleValue(vehicleValue)
+        !carName.isEmpty && instAmount > 0 && total > 0 && alreadyPaid <= total
     }
 
-    private var financed: Double { doubleValue(vehicleValue) - doubleValue(downPayment) }
-    private var rate: Double { doubleValue(monthlyRatePercent) / 100 }
-    private var n: Int { intValue(totalInstallments) }
-    private var pmt: Double {
-        guard financed > 0, n > 0 else { return 0 }
-        if rate > 0 {
-            return financed * (rate * pow(1 + rate, Double(n))) / (pow(1 + rate, Double(n)) - 1)
-        }
-        return financed / Double(n)
-    }
+    private var totalCost: Double { instAmount * Double(total) }
+    private var alreadyPaidAmount: Double { instAmount * Double(alreadyPaid) }
+    private var remainingAmount: Double { instAmount * Double(total - alreadyPaid) }
 
     var body: some View {
         NavigationStack {
             Form {
+                // Car section
                 Section(String(localized: "add.section.vehicle")) {
-                    // Car photo picker
-                    HStack {
+                    // Photo picker row
+                    HStack(spacing: 14) {
                         PhotosPicker(selection: $photoItem, matching: .images) {
                             if let photo = carPhoto {
                                 Image(uiImage: photo)
@@ -70,13 +73,11 @@ struct AddFinancingView: View {
                                 }
                             }
                         }
-
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text(String(localized: "add.car.photo"))
                                 .font(.subheadline)
                             Text(String(localized: "add.car.photo.hint"))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .font(.caption).foregroundStyle(.secondary)
                         }
                     }
 
@@ -86,23 +87,20 @@ struct AddFinancingView: View {
                     TextField(String(localized: "add.bank"), text: $bank)
                 }
 
-                Section(String(localized: "add.section.values")) {
-                    currencyField(String(localized: "add.vehicle.value"), text: $vehicleValue)
-                    currencyField(String(localized: "add.down.payment.optional"), text: $downPayment)
-                    HStack {
-                        TextField(String(localized: "add.monthly.rate.optional"), text: $monthlyRatePercent)
-                            .keyboardType(.decimalPad)
-                        if monthlyRatePercent.isEmpty {
-                            Text(String(localized: "add.monthly.rate.zero.hint"))
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
-                }
-
-                Section(String(localized: "add.section.term")) {
+                // Financing section
+                Section(String(localized: "add.section.financing")) {
+                    currencyField(String(localized: "add.vehicle.value.optional"), text: $vehicleValue)
+                    currencyField(String(localized: "add.installment.value"), text: $installmentValue)
                     TextField(String(localized: "add.total.installments"), text: $totalInstallments)
                         .keyboardType(.numberPad)
+
+                    // Already paid stepper
+                    Stepper(
+                        String(format: String(localized: "add.already.paid"), alreadyPaid),
+                        value: $alreadyPaid,
+                        in: 0...max(0, total)
+                    )
+
                     DatePicker(
                         String(localized: "add.first.due.date"),
                         selection: $firstDueDate,
@@ -110,11 +108,43 @@ struct AddFinancingView: View {
                     )
                 }
 
-                if pmt > 0 {
+                // Summary
+                if instAmount > 0 && total > 0 {
                     Section(String(localized: "add.section.summary")) {
-                        LabeledContent(String(localized: "add.financed.amount"), value: financed.currencyFormatted)
-                        LabeledContent(String(localized: "add.monthly.payment"), value: pmt.currencyFormatted)
-                        LabeledContent(String(localized: "add.total.cost"), value: (pmt * Double(n)).currencyFormatted)
+                        LabeledContent(String(localized: "add.total.cost"), value: totalCost.currencyFormatted)
+                        if alreadyPaid > 0 {
+                            LabeledContent(String(localized: "add.already.paid.amount"), value: alreadyPaidAmount.currencyFormatted)
+                                .foregroundStyle(.green)
+                        }
+                        LabeledContent(String(localized: "add.remaining.amount"), value: remainingAmount.currencyFormatted)
+                    }
+                }
+
+                // Advanced (optional rate/down payment)
+                Section {
+                    Button {
+                        withAnimation { showAdvanced.toggle() }
+                    } label: {
+                        HStack {
+                            Text(String(localized: "add.advanced"))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: showAdvanced ? "chevron.up" : "chevron.down")
+                                .foregroundStyle(.secondary)
+                                .font(.caption)
+                        }
+                    }
+                    if showAdvanced {
+                        currencyField(String(localized: "add.down.payment.optional"), text: $downPayment)
+                        HStack {
+                            TextField(String(localized: "add.monthly.rate.optional"), text: $monthlyRatePercent)
+                                .keyboardType(.decimalPad)
+                            if monthlyRatePercent.isEmpty {
+                                Text(String(localized: "add.monthly.rate.zero.hint"))
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
                     }
                 }
             }
@@ -155,8 +185,10 @@ struct AddFinancingView: View {
             vehicleValue: doubleValue(vehicleValue),
             downPayment: doubleValue(downPayment),
             monthlyRate: rate,
-            totalInstallments: n,
+            installmentAmount: instAmount,
+            totalInstallments: total,
             firstDueDate: firstDueDate,
+            alreadyPaidCount: alreadyPaid,
             carPhotoFilename: savedPhotoFilename
         )
         dismiss()
