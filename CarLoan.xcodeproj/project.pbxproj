@@ -1,0 +1,456 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0B0D2B094473963902F379E2 /* FinancingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431F179CFA2193C5825B1D21 /* FinancingListView.swift */; };
+		27D5CC1AEBADF129AC8FF800 /* InstallmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1541CE0706D05774070B871 /* InstallmentDetailView.swift */; };
+		2BB81D381EE8F4A4BFE9520B /* SimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E51E96CAAC8A7DBB01D012 /* SimulationView.swift */; };
+		2D839CF104625E3111FBEF46 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC917C8CE56918BB6ADEDFA /* BackupService.swift */; };
+		2FF1D198BFCAB4DA877865B0 /* PDFExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233990603457B0E49BF03ADC /* PDFExporter.swift */; };
+		3CB394196B376D92108B4C13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7FF3E407E7A7C0E6868D8E07 /* Localizable.strings */; };
+		470683FD43F0382BF4A321C7 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967B07A049D0730A5BDE167 /* DashboardView.swift */; };
+		506546E6744E3AE17881B2C8 /* CarLoanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6427BC33A3E682C0FE45FF1A /* CarLoanApp.swift */; };
+		5E172F0ECA27F81072FED8B2 /* Installment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E607A649F1A530081CD52 /* Installment.swift */; };
+		64A2A338D95D9F2CB6CF1366 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26D442281F8C0705BE926A9 /* SettingsView.swift */; };
+		67A8680890B5E0ED52AC7D5F /* Financing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6FF5ACADFB5D35BCEA4E4B7 /* Financing.swift */; };
+		78D95E7AAFF99B408E165EBE /* LoanCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE951F0634E9C6AAEAC31327 /* LoanCalculator.swift */; };
+		7A7EDB168540D49534FCE543 /* InstallmentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF4F30E8EB09F2E7122D6088 /* InstallmentListView.swift */; };
+		7C48F3E07F217E1E06230685 /* MigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = C182F165D8792797BD1B49EA /* MigrationPlan.swift */; };
+		84A1D759F51AE5B9DB7D2B32 /* SchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8100E1AB1B726B35C92314E9 /* SchemaV1.swift */; };
+		89B3D6C3420A1E8B017E1607 /* InstallmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67966D3E7CC0B15A887D0B99 /* InstallmentViewModel.swift */; };
+		8B4E72C9B7FE2634313ED7AB /* AddFinancingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A559C00AA655AC7317FF22 /* AddFinancingView.swift */; };
+		9332CF4586F67D73166B808C /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16CF8F75738DB7CB2069F1 /* NotificationService.swift */; };
+		9D7D43799DEE27B91F6457C5 /* FinancingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F320CCE60E18A7EB81B00EF4 /* FinancingViewModel.swift */; };
+		A00BECC7AA2719297CD6675A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D23F43039B10DCAB460669A /* Assets.xcassets */; };
+		B1CCA42DEC51F87639CF8345 /* CurrencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE8E532E68C47C58ABEB187 /* CurrencyFormatter.swift */; };
+		B334040F2F881378E2A04A5D /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1324447D8DBE7A0FDB68BD /* Payment.swift */; };
+		BB06F75A624FEC2491B58B6C /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A6C76DC0AE70B41A86F73B /* ReportView.swift */; };
+		E4F3D970D81C6AC686FD00A9 /* ImageStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315E412F881BBBC1CAE93A76 /* ImageStorageService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		043E607A649F1A530081CD52 /* Installment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Installment.swift; sourceTree = "<group>"; };
+		0C1324447D8DBE7A0FDB68BD /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
+		0FE8E532E68C47C58ABEB187 /* CurrencyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormatter.swift; sourceTree = "<group>"; };
+		233990603457B0E49BF03ADC /* PDFExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFExporter.swift; sourceTree = "<group>"; };
+		315E412F881BBBC1CAE93A76 /* ImageStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStorageService.swift; sourceTree = "<group>"; };
+		3D23F43039B10DCAB460669A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		431F179CFA2193C5825B1D21 /* FinancingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancingListView.swift; sourceTree = "<group>"; };
+		46E51E96CAAC8A7DBB01D012 /* SimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulationView.swift; sourceTree = "<group>"; };
+		4A0489785D7E4CBAB02DBF26 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6427BC33A3E682C0FE45FF1A /* CarLoanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarLoanApp.swift; sourceTree = "<group>"; };
+		67966D3E7CC0B15A887D0B99 /* InstallmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentViewModel.swift; sourceTree = "<group>"; };
+		8100E1AB1B726B35C92314E9 /* SchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV1.swift; sourceTree = "<group>"; };
+		8E410F3BF027F691119652F8 /* CarLoan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CarLoan.entitlements; sourceTree = "<group>"; };
+		9EC917C8CE56918BB6ADEDFA /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
+		A6FF5ACADFB5D35BCEA4E4B7 /* Financing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Financing.swift; sourceTree = "<group>"; };
+		A967B07A049D0730A5BDE167 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		AF4F30E8EB09F2E7122D6088 /* InstallmentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentListView.swift; sourceTree = "<group>"; };
+		B9A559C00AA655AC7317FF22 /* AddFinancingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFinancingView.swift; sourceTree = "<group>"; };
+		C182F165D8792797BD1B49EA /* MigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationPlan.swift; sourceTree = "<group>"; };
+		C752C1D7B0EF2EC6CB518948 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CD16CF8F75738DB7CB2069F1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		CE951F0634E9C6AAEAC31327 /* LoanCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoanCalculator.swift; sourceTree = "<group>"; };
+		E1541CE0706D05774070B871 /* InstallmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentDetailView.swift; sourceTree = "<group>"; };
+		E25F23F562E0BF8FAB5E5C15 /* CarLoan.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CarLoan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4D51F9C5ED8A3FB13A04E63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F26D442281F8C0705BE926A9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F2A6C76DC0AE70B41A86F73B /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
+		F320CCE60E18A7EB81B00EF4 /* FinancingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancingViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		14929B69FE17998BB76686F5 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				C182F165D8792797BD1B49EA /* MigrationPlan.swift */,
+				8100E1AB1B726B35C92314E9 /* SchemaV1.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		20C3D59609942E4FB5FE5ACD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9EC917C8CE56918BB6ADEDFA /* BackupService.swift */,
+				315E412F881BBBC1CAE93A76 /* ImageStorageService.swift */,
+				CE951F0634E9C6AAEAC31327 /* LoanCalculator.swift */,
+				CD16CF8F75738DB7CB2069F1 /* NotificationService.swift */,
+				233990603457B0E49BF03ADC /* PDFExporter.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		61C5289ED9A014BAADB606B1 /* CarLoan */ = {
+			isa = PBXGroup;
+			children = (
+				3D23F43039B10DCAB460669A /* Assets.xcassets */,
+				8E410F3BF027F691119652F8 /* CarLoan.entitlements */,
+				6427BC33A3E682C0FE45FF1A /* CarLoanApp.swift */,
+				E4D51F9C5ED8A3FB13A04E63 /* Info.plist */,
+				14929B69FE17998BB76686F5 /* Database */,
+				7CE8F731EBCC5B72D3EC8005 /* Helpers */,
+				7FF3E407E7A7C0E6868D8E07 /* Localizable.strings */,
+				BE7F9632FC6E7AA51D65C38B /* Models */,
+				20C3D59609942E4FB5FE5ACD /* Services */,
+				67C67FECEAF5216805F737BE /* ViewModels */,
+				9A3FC1C22C301C7D331B8020 /* Views */,
+			);
+			path = CarLoan;
+			sourceTree = "<group>";
+		};
+		6391A09FC47AD2482CDD7A5B = {
+			isa = PBXGroup;
+			children = (
+				61C5289ED9A014BAADB606B1 /* CarLoan */,
+				9CAC06EC33E33F532E4740D6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		67C67FECEAF5216805F737BE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				F320CCE60E18A7EB81B00EF4 /* FinancingViewModel.swift */,
+				67966D3E7CC0B15A887D0B99 /* InstallmentViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		7CE8F731EBCC5B72D3EC8005 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				0FE8E532E68C47C58ABEB187 /* CurrencyFormatter.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		9A3FC1C22C301C7D331B8020 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B9A559C00AA655AC7317FF22 /* AddFinancingView.swift */,
+				A967B07A049D0730A5BDE167 /* DashboardView.swift */,
+				431F179CFA2193C5825B1D21 /* FinancingListView.swift */,
+				E1541CE0706D05774070B871 /* InstallmentDetailView.swift */,
+				AF4F30E8EB09F2E7122D6088 /* InstallmentListView.swift */,
+				F2A6C76DC0AE70B41A86F73B /* ReportView.swift */,
+				F26D442281F8C0705BE926A9 /* SettingsView.swift */,
+				46E51E96CAAC8A7DBB01D012 /* SimulationView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9CAC06EC33E33F532E4740D6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E25F23F562E0BF8FAB5E5C15 /* CarLoan.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BE7F9632FC6E7AA51D65C38B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A6FF5ACADFB5D35BCEA4E4B7 /* Financing.swift */,
+				043E607A649F1A530081CD52 /* Installment.swift */,
+				0C1324447D8DBE7A0FDB68BD /* Payment.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F36FBCBA85F6F35527CC084C /* CarLoan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAF29AA19BB3494A99D8C644 /* Build configuration list for PBXNativeTarget "CarLoan" */;
+			buildPhases = (
+				68FEE9621A6080471910F477 /* Sources */,
+				096CAB0E6607DC77398F5770 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CarLoan;
+			packageProductDependencies = (
+			);
+			productName = CarLoan;
+			productReference = E25F23F562E0BF8FAB5E5C15 /* CarLoan.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EBBBEAD7C2608A358AC3D9A5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					F36FBCBA85F6F35527CC084C = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = C607ACB7E5B0D7598A8645D0 /* Build configuration list for PBXProject "CarLoan" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				"pt-BR",
+			);
+			mainGroup = 6391A09FC47AD2482CDD7A5B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 9CAC06EC33E33F532E4740D6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F36FBCBA85F6F35527CC084C /* CarLoan */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		096CAB0E6607DC77398F5770 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00BECC7AA2719297CD6675A /* Assets.xcassets in Resources */,
+				3CB394196B376D92108B4C13 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		68FEE9621A6080471910F477 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B4E72C9B7FE2634313ED7AB /* AddFinancingView.swift in Sources */,
+				2D839CF104625E3111FBEF46 /* BackupService.swift in Sources */,
+				506546E6744E3AE17881B2C8 /* CarLoanApp.swift in Sources */,
+				B1CCA42DEC51F87639CF8345 /* CurrencyFormatter.swift in Sources */,
+				470683FD43F0382BF4A321C7 /* DashboardView.swift in Sources */,
+				67A8680890B5E0ED52AC7D5F /* Financing.swift in Sources */,
+				0B0D2B094473963902F379E2 /* FinancingListView.swift in Sources */,
+				9D7D43799DEE27B91F6457C5 /* FinancingViewModel.swift in Sources */,
+				E4F3D970D81C6AC686FD00A9 /* ImageStorageService.swift in Sources */,
+				5E172F0ECA27F81072FED8B2 /* Installment.swift in Sources */,
+				27D5CC1AEBADF129AC8FF800 /* InstallmentDetailView.swift in Sources */,
+				7A7EDB168540D49534FCE543 /* InstallmentListView.swift in Sources */,
+				89B3D6C3420A1E8B017E1607 /* InstallmentViewModel.swift in Sources */,
+				78D95E7AAFF99B408E165EBE /* LoanCalculator.swift in Sources */,
+				7C48F3E07F217E1E06230685 /* MigrationPlan.swift in Sources */,
+				9332CF4586F67D73166B808C /* NotificationService.swift in Sources */,
+				2FF1D198BFCAB4DA877865B0 /* PDFExporter.swift in Sources */,
+				B334040F2F881378E2A04A5D /* Payment.swift in Sources */,
+				BB06F75A624FEC2491B58B6C /* ReportView.swift in Sources */,
+				84A1D759F51AE5B9DB7D2B32 /* SchemaV1.swift in Sources */,
+				64A2A338D95D9F2CB6CF1366 /* SettingsView.swift in Sources */,
+				2BB81D381EE8F4A4BFE9520B /* SimulationView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7FF3E407E7A7C0E6868D8E07 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C752C1D7B0EF2EC6CB518948 /* en */,
+				4A0489785D7E4CBAB02DBF26 /* pt-BR */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5F0713E5A767ADC9FDB44F16 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CarLoan/CarLoan.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = CarLoan/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelreis.carloan;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6B4E9EE00632D87F3A1B3BFE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		9A64678224C8D811F8CCF770 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B7833DF48BFDAAAB7B4D870A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = CarLoan/CarLoan.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = CarLoan/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rafaelreis.carloan;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C607ACB7E5B0D7598A8645D0 /* Build configuration list for PBXProject "CarLoan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B4E9EE00632D87F3A1B3BFE /* Debug */,
+				9A64678224C8D811F8CCF770 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EAF29AA19BB3494A99D8C644 /* Build configuration list for PBXNativeTarget "CarLoan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B7833DF48BFDAAAB7B4D870A /* Debug */,
+				5F0713E5A767ADC9FDB44F16 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EBBBEAD7C2608A358AC3D9A5 /* Project object */;
+}

@@ -1,0 +1,136 @@
+// App
+"error.db.title" = "Erro no banco de dados";
+"error.db.retry" = "Tentar novamente";
+
+// Financing list
+"financing.list.title" = "Meus Financiamentos";
+"financing.empty.title" = "Nenhum Financiamento";
+"financing.empty.description" = "Toque em + para adicionar seu primeiro financiamento.";
+"financing.row.installments" = "parcelas";
+
+// Add financing
+"add.title" = "Novo Financiamento";
+"add.section.vehicle" = "Veículo";
+"add.section.values" = "Valores";
+"add.section.term" = "Prazo";
+"add.section.summary" = "Resumo";
+"add.car.name" = "Nome / modelo do carro";
+"add.bank" = "Banco / financeira";
+"add.vehicle.value" = "Valor do veículo";
+"add.down.payment" = "Entrada";
+"add.monthly.rate" = "Taxa mensal (%)";
+"add.total.installments" = "Número de parcelas";
+"add.first.due.date" = "Vencimento da 1ª parcela";
+"add.financed.amount" = "Valor financiado";
+"add.monthly.payment" = "Valor da parcela";
+"add.total.cost" = "Custo total";
+
+// Dashboard
+"dashboard.installments" = "parcelas";
+"dashboard.paid" = "Pago";
+"dashboard.remaining" = "Restante";
+"dashboard.next.title" = "Próxima Parcela";
+"dashboard.installment" = "Parcela";
+"dashboard.days.left" = "%d dias restantes";
+"dashboard.overdue" = "Vencida";
+"dashboard.see.installments" = "Ver Parcelas";
+"dashboard.see.report" = "Ver Relatório";
+"dashboard.simulate" = "Simular Antecipação";
+
+// Installment statuses
+"status.paid" = "Pago";
+"status.open" = "Em aberto";
+"status.overdue" = "Vencido";
+
+// Filters
+"filter.label" = "Filtro";
+"filter.all" = "Todas";
+"filter.paid" = "Pagas";
+"filter.open" = "Em aberto";
+"filter.overdue" = "Vencidas";
+
+// Installment list
+"installments.title" = "Parcelas";
+"installments.row.number" = "Parcela #%d";
+
+// Installment detail
+"detail.title" = "Parcela #%d";
+"detail.due.date" = "Vencimento";
+"detail.amount" = "Valor";
+"detail.principal" = "Amortização";
+"detail.interest" = "Juros";
+"detail.balance.after" = "Saldo devedor";
+"detail.paid.title" = "Pago";
+"detail.paid.date" = "Data do pagamento";
+"detail.paid.amount" = "Valor pago";
+"detail.note" = "Observação";
+"detail.note.optional" = "Observação (opcional)";
+"detail.receipts" = "Comprovantes";
+"detail.add.receipt" = "Adicionar comprovante";
+"detail.mark.paid" = "Marcar como pago";
+"detail.undo.payment" = "Desfazer pagamento";
+
+// Report
+"report.title" = "Relatório";
+"report.summary" = "Resumo";
+"report.paid.count" = "Parcelas pagas";
+"report.open.count" = "Parcelas em aberto";
+"report.overdue.count" = "Parcelas vencidas";
+"report.total.paid" = "Total pago";
+"report.total.remaining" = "Total restante";
+"report.principal.paid" = "Amortização paga";
+"report.interest.paid" = "Juros pagos";
+"report.send" = "Enviar Relatório";
+"report.export.format" = "Escolha o formato";
+"report.export.pdf" = "PDF";
+"report.export.image" = "Imagem (PNG)";
+"report.table.title" = "Todas as Parcelas";
+"report.generated.by" = "Gerado pelo CarLoan";
+
+// PDF
+"pdf.installments" = "Parcelas";
+"pdf.paid" = "Total pago";
+"pdf.remaining" = "Total restante";
+"pdf.due" = "Vencimento";
+"pdf.amount" = "Valor";
+"pdf.principal" = "Amortização";
+"pdf.interest" = "Juros";
+"pdf.status" = "Status";
+"pdf.generated" = "Gerado em";
+
+// Simulation
+"simulation.title" = "Antecipação";
+"simulation.from" = "Quitar a partir da parcela";
+"simulation.installment" = "Parcela #%d";
+"simulation.result" = "Resultado";
+"simulation.installments.count" = "Parcelas a pagar";
+"simulation.total.to.pay" = "Total a pagar agora";
+"simulation.interest.saved" = "Juros economizados";
+"simulation.payoff.date" = "Data de quitação";
+"simulation.normal.total" = "Total normal";
+"simulation.saving" = "Sua economia";
+
+// Settings
+"settings.title" = "Configurações";
+"settings.notifications" = "Notificações";
+"settings.remind.days" = "Lembrar";
+"settings.day" = "dia antes";
+"settings.days" = "dias antes";
+"settings.request.permission" = "Ativar notificações";
+"settings.data" = "Dados";
+"settings.export" = "Exportar backup (JSON)";
+"settings.import" = "Importar backup";
+"settings.error" = "Erro";
+
+// Notifications
+"notification.title" = "Parcela próxima do vencimento";
+"notification.body" = "A parcela #%d vence em %d dias.";
+"notification.payoff.title" = "Parabéns!";
+"notification.payoff.body" = "%@ foi totalmente quitado!";
+
+// Actions
+"action.cancel" = "Cancelar";
+"action.save" = "Salvar";
+"action.done" = "Concluir";
+"action.ok" = "OK";
+"action.delete" = "Excluir";
