@@ -92,17 +92,18 @@ struct FinancingListView: View {
     }
 
     private func exportFinancing(_ financing: Financing) {
-        do {
-            let data = try BackupService.export(financings: [financing])
-            let safeName = financing.carName.replacingOccurrences(of: " ", with: "-")
-            let url = FileManager.default.temporaryDirectory
-                .appendingPathComponent("\(safeName)-carloan.json")
-            try data.write(to: url)
+        let safeName = financing.carName.replacingOccurrences(of: " ", with: "-")
+        // Serialize on main actor (SwiftData models are main-actor bound),
+        // then write to disk in background to avoid blocking UI
+        guard let data = try? BackupService.export(financings: [financing]) else { return }
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("\(safeName)-carloan.json")
+        Task {
+            await Task.detached(priority: .userInitiated) {
+                try? data.write(to: url)
+            }.value
             exportURL = url
             showShareSheet = true
-        } catch {
-            errorMsg = error.localizedDescription
-            showError = true
         }
     }
 
