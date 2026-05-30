@@ -1,8 +1,5 @@
 import SwiftUI
 
-/// Text field that auto-formats currency as the user types (cents-first).
-/// Bind to a `Double` — the field keeps only digit input internally and
-/// converts to the locale currency format on every keystroke.
 struct CurrencyTextField: View {
     let label: String
     @Binding var value: Double
@@ -17,27 +14,27 @@ struct CurrencyTextField: View {
                 let digits = newText.filter(\.isNumber)
                 let cents = Int(digits) ?? 0
                 let newValue = Double(cents) / 100.0
-                // Avoid feedback loop: only update if value actually changed
                 if abs(newValue - value) > 0.001 {
                     value = newValue
                 }
-                displayText = formatted(cents)
+                // Show empty when zero so placeholder is visible
+                displayText = cents == 0 ? "" : formatted(cents)
             }
     }
 
     private func syncFromValue() {
         let cents = Int((value * 100).rounded())
-        let formatted = formatted(cents)
-        if displayText != formatted {
-            displayText = formatted
+        // Only populate if value is non-zero (preserve placeholder when empty)
+        let target = cents == 0 ? "" : formatted(cents)
+        if displayText != target {
+            displayText = target
         }
     }
 
     private func formatted(_ cents: Int) -> String {
-        let amount = Double(cents) / 100.0
         let fmt = NumberFormatter()
         fmt.numberStyle = .currency
         fmt.locale = Locale.current
-        return fmt.string(from: NSNumber(value: amount)) ?? ""
+        return fmt.string(from: NSNumber(value: Double(cents) / 100.0)) ?? ""
     }
 }
