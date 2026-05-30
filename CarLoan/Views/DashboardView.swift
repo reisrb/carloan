@@ -61,16 +61,10 @@ struct DashboardView: View {
                 .padding()
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
 
-                // Amounts
-                HStack(spacing: 16) {
-                    amountCard(title: String(localized: "dashboard.paid"), value: totalPaid, color: .green)
-                    amountCard(title: String(localized: "dashboard.remaining"), value: totalRemaining, color: .orange)
-                }
-
-                // Vehicle value (if informed)
+                // Original vehicle value
                 if financing.vehicleValue > 0 {
                     HStack {
-                        Text(String(localized: "dashboard.vehicle.value"))
+                        Text(String(localized: "dashboard.original.value"))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         Spacer()
@@ -78,6 +72,12 @@ struct DashboardView: View {
                             .font(.subheadline.bold())
                     }
                     .padding(.horizontal, 4)
+                }
+
+                // Amounts
+                HStack(spacing: 16) {
+                    amountCard(title: String(localized: "dashboard.paid"), value: totalPaid, color: .green)
+                    amountCard(title: String(localized: "dashboard.remaining"), value: totalRemaining, color: .orange)
                 }
 
                 // ── Quick pay card ──

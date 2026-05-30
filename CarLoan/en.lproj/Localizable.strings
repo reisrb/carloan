@@ -40,6 +40,7 @@
 
 // Dashboard
 "dashboard.vehicle.value" = "Vehicle value";
+"dashboard.original.value" = "Original value";
 "dashboard.this.month" = "This month";
 "dashboard.this.month.badge" = "This month";
 "dashboard.due.today" = "Due today";
@@ -155,6 +156,7 @@
 "settings.day" = "day before";
 "settings.days" = "days before";
 "settings.request.permission" = "Enable notifications";
+"settings.notifications.enabled" = "Notifications enabled";
 "settings.data" = "Data";
 "settings.export" = "Export backup (JSON)";
 "settings.import" = "Import backup";

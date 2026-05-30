@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
@@ -13,6 +14,7 @@ struct SettingsView: View {
     @State private var showShareSheet = false
     @State private var errorMessage: String?
     @State private var showError = false
+    @State private var notifStatus: UNAuthorizationStatus = .notDetermined
 
     var body: some View {
         NavigationStack {
@@ -23,11 +25,18 @@ struct SettingsView: View {
                         Text("3 \(String(localized: "settings.days"))").tag(3)
                         Text("7 \(String(localized: "settings.days"))").tag(7)
                     }
-                    Button(String(localized: "settings.request.permission")) {
-                        Task {
-                            await NotificationService.requestPermission()
-                            rescheduleNotifications()
+                    // Only show when not yet authorized
+                    if notifStatus != .authorized && notifStatus != .provisional {
+                        Button(String(localized: "settings.request.permission")) {
+                            Task {
+                                await NotificationService.requestPermission()
+                                await refreshNotifStatus()
+                                rescheduleNotifications()
+                            }
                         }
+                    } else {
+                        Label(String(localized: "settings.notifications.enabled"), systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
                     }
                 }
 
@@ -69,7 +78,17 @@ struct SettingsView: View {
             } message: {
                 Text(errorMessage ?? "")
             }
+            .task { await refreshNotifStatus() }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                Task { await refreshNotifStatus() }
+            }
         }
+    }
+
+    @MainActor
+    private func refreshNotifStatus() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        notifStatus = settings.authorizationStatus
     }
 
     private func exportData() {
