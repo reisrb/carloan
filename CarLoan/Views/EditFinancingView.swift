@@ -9,8 +9,8 @@ struct EditFinancingView: View {
     @State private var carName: String
     @State private var licensePlate: String
     @State private var bank: String
-    @State private var vehicleValue: String
-    @State private var installmentValue: String
+    @State private var vehicleValue: Double
+    @State private var installmentValue: Double
     @State private var photoItem: PhotosPickerItem?
     @State private var carPhoto: UIImage?
     @State private var savedPhotoFilename: String?
@@ -20,9 +20,9 @@ struct EditFinancingView: View {
         _carName = State(initialValue: financing.carName)
         _licensePlate = State(initialValue: financing.licensePlate)
         _bank = State(initialValue: financing.bank)
-        _vehicleValue = State(initialValue: financing.vehicleValue > 0 ? String(format: "%.2f", financing.vehicleValue) : "")
+        _vehicleValue = State(initialValue: financing.vehicleValue)
         let currentPMT = financing.installments.first?.amount ?? 0
-        _installmentValue = State(initialValue: currentPMT > 0 ? String(format: "%.2f", currentPMT) : "")
+        _installmentValue = State(initialValue: currentPMT)
         _savedPhotoFilename = State(initialValue: financing.carPhotoFilename)
     }
 
@@ -80,10 +80,8 @@ struct EditFinancingView: View {
                 }
 
                 Section(String(localized: "add.section.financing")) {
-                    TextField(String(localized: "add.vehicle.value.optional"), text: $vehicleValue)
-                        .keyboardType(.decimalPad)
-                    TextField(String(localized: "edit.installment.value.unpaid"), text: $installmentValue)
-                        .keyboardType(.decimalPad)
+                    CurrencyTextField(label: String(localized: "add.vehicle.value.optional"), value: $vehicleValue)
+                    CurrencyTextField(label: String(localized: "edit.installment.value.unpaid"), value: $installmentValue)
                 }
 
                 Section {
@@ -116,8 +114,8 @@ struct EditFinancingView: View {
             carName: carName,
             licensePlate: licensePlate,
             bank: bank,
-            vehicleValue: Double(vehicleValue.replacingOccurrences(of: ",", with: ".")) ?? 0,
-            installmentAmount: Double(installmentValue.replacingOccurrences(of: ",", with: ".")) ?? 0,
+            vehicleValue: vehicleValue,
+            installmentAmount: installmentValue,
             carPhotoFilename: savedPhotoFilename
         )
         dismiss()

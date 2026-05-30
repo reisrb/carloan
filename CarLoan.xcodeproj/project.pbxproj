@@ -24,6 +24,7 @@
 		7C48F3E07F217E1E06230685 /* MigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = C182F165D8792797BD1B49EA /* MigrationPlan.swift */; };
 		84A1D759F51AE5B9DB7D2B32 /* SchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8100E1AB1B726B35C92314E9 /* SchemaV1.swift */; };
 		89B3D6C3420A1E8B017E1607 /* InstallmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67966D3E7CC0B15A887D0B99 /* InstallmentViewModel.swift */; };
+		8AC6AD91E62536FEF2D19A3E /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78061D958C4106E756A7530F /* CurrencyTextField.swift */; };
 		8B4E72C9B7FE2634313ED7AB /* AddFinancingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A559C00AA655AC7317FF22 /* AddFinancingView.swift */; };
 		9332CF4586F67D73166B808C /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16CF8F75738DB7CB2069F1 /* NotificationService.swift */; };
 		9D7D43799DEE27B91F6457C5 /* FinancingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F320CCE60E18A7EB81B00EF4 /* FinancingViewModel.swift */; };
@@ -46,6 +47,7 @@
 		4A0489785D7E4CBAB02DBF26 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6427BC33A3E682C0FE45FF1A /* CarLoanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarLoanApp.swift; sourceTree = "<group>"; };
 		67966D3E7CC0B15A887D0B99 /* InstallmentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentViewModel.swift; sourceTree = "<group>"; };
+		78061D958C4106E756A7530F /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
 		8100E1AB1B726B35C92314E9 /* SchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV1.swift; sourceTree = "<group>"; };
 		8E410F3BF027F691119652F8 /* CarLoan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CarLoan.entitlements; sourceTree = "<group>"; };
 		9EC917C8CE56918BB6ADEDFA /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				0FE8E532E68C47C58ABEB187 /* CurrencyFormatter.swift */,
+				78061D958C4106E756A7530F /* CurrencyTextField.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 				2D839CF104625E3111FBEF46 /* BackupService.swift in Sources */,
 				506546E6744E3AE17881B2C8 /* CarLoanApp.swift in Sources */,
 				B1CCA42DEC51F87639CF8345 /* CurrencyFormatter.swift in Sources */,
+				8AC6AD91E62536FEF2D19A3E /* CurrencyTextField.swift in Sources */,
 				470683FD43F0382BF4A321C7 /* DashboardView.swift in Sources */,
 				529CCEB7BF0FD31F8637C22A /* EditFinancingView.swift in Sources */,
 				67A8680890B5E0ED52AC7D5F /* Financing.swift in Sources */,

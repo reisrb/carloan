@@ -13,52 +13,41 @@ struct AddFinancingView: View {
     @State private var carPhoto: UIImage?
     @State private var savedPhotoFilename: String?
 
-    // Financing core
-    @State private var vehicleValue = ""
-    @State private var installmentValue = ""
+    // Financing core (Double for CurrencyTextField)
+    @State private var vehicleValue: Double = 0
+    @State private var installmentValue: Double = 0
     @State private var totalInstallments = ""
     @State private var alreadyPaid = 0
     @State private var firstDueDate = Calendar.current.date(byAdding: .month, value: 1, to: Date()) ?? Date()
 
-    // Advanced (optional)
+    // Advanced
     @State private var showAdvanced = false
-    @State private var downPayment = ""
+    @State private var downPayment: Double = 0
     @State private var monthlyRatePercent = ""
 
-    private var instAmount: Double { doubleValue(installmentValue) }
-    private var total: Int { intValue(totalInstallments) }
-    private var rate: Double { doubleValue(monthlyRatePercent) / 100 }
+    private var total: Int { Int(totalInstallments) ?? 0 }
+    private var rate: Double { Double(monthlyRatePercent.replacingOccurrences(of: ",", with: ".")) ?? 0 / 100 }
 
     private var isValid: Bool {
-        !carName.isEmpty && instAmount > 0 && total > 0 && alreadyPaid <= total
+        !carName.isEmpty && installmentValue > 0 && total > 0 && alreadyPaid <= total
     }
-
-    private var totalCost: Double { instAmount * Double(total) }
-    private var alreadyPaidAmount: Double { instAmount * Double(alreadyPaid) }
-    private var remainingAmount: Double { instAmount * Double(total - alreadyPaid) }
 
     var body: some View {
         NavigationStack {
             Form {
-                // Car section
                 Section(String(localized: "add.section.vehicle")) {
-                    // Photo picker row
                     HStack(spacing: 14) {
                         PhotosPicker(selection: $photoItem, matching: .images) {
                             if let photo = carPhoto {
                                 Image(uiImage: photo)
-                                    .resizable()
-                                    .scaledToFill()
+                                    .resizable().scaledToFill()
                                     .frame(width: 72, height: 72)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                             } else {
                                 ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(.systemGray5))
+                                    RoundedRectangle(cornerRadius: 10).fill(Color(.systemGray5))
                                         .frame(width: 72, height: 72)
-                                    Image(systemName: "car.fill")
-                                        .font(.title2)
-                                        .foregroundStyle(.secondary)
+                                    Image(systemName: "car.fill").font(.title2).foregroundStyle(.secondary)
                                 }
                             }
                         }
@@ -74,75 +63,56 @@ struct AddFinancingView: View {
                             }
                         }
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(String(localized: "add.car.photo"))
-                                .font(.subheadline)
-                            Text(String(localized: "add.car.photo.hint"))
-                                .font(.caption).foregroundStyle(.secondary)
+                            Text(String(localized: "add.car.photo")).font(.subheadline)
+                            Text(String(localized: "add.car.photo.hint")).font(.caption).foregroundStyle(.secondary)
                         }
                     }
-
                     TextField(String(localized: "add.car.name"), text: $carName)
                     TextField(String(localized: "add.license.plate"), text: $licensePlate)
                         .textInputAutocapitalization(.characters)
                     TextField(String(localized: "add.bank"), text: $bank)
                 }
 
-                // Financing section
                 Section(String(localized: "add.section.financing")) {
-                    currencyField(String(localized: "add.vehicle.value.optional"), text: $vehicleValue)
-                    currencyField(String(localized: "add.installment.value"), text: $installmentValue)
+                    CurrencyTextField(label: String(localized: "add.vehicle.value.optional"), value: $vehicleValue)
+                    CurrencyTextField(label: String(localized: "add.installment.value"), value: $installmentValue)
                     TextField(String(localized: "add.total.installments"), text: $totalInstallments)
                         .keyboardType(.numberPad)
-
-                    // Already paid stepper
                     Stepper(
                         String(format: String(localized: "add.already.paid"), alreadyPaid),
-                        value: $alreadyPaid,
-                        in: 0...max(0, total)
+                        value: $alreadyPaid, in: 0...max(0, total)
                     )
-
-                    DatePicker(
-                        String(localized: "add.first.due.date"),
-                        selection: $firstDueDate,
-                        displayedComponents: .date
-                    )
+                    DatePicker(String(localized: "add.first.due.date"), selection: $firstDueDate, displayedComponents: .date)
                 }
 
-                // Summary
-                if instAmount > 0 && total > 0 {
+                if installmentValue > 0 && total > 0 {
                     Section(String(localized: "add.section.summary")) {
-                        LabeledContent(String(localized: "add.total.cost"), value: totalCost.currencyFormatted)
+                        LabeledContent(String(localized: "add.total.cost"), value: (installmentValue * Double(total)).currencyFormatted)
                         if alreadyPaid > 0 {
-                            LabeledContent(String(localized: "add.already.paid.amount"), value: alreadyPaidAmount.currencyFormatted)
+                            LabeledContent(String(localized: "add.already.paid.amount"), value: (installmentValue * Double(alreadyPaid)).currencyFormatted)
                                 .foregroundStyle(.green)
                         }
-                        LabeledContent(String(localized: "add.remaining.amount"), value: remainingAmount.currencyFormatted)
+                        LabeledContent(String(localized: "add.remaining.amount"), value: (installmentValue * Double(total - alreadyPaid)).currencyFormatted)
                     }
                 }
 
-                // Advanced (optional rate/down payment)
                 Section {
-                    Button {
-                        withAnimation { showAdvanced.toggle() }
-                    } label: {
+                    Button { withAnimation { showAdvanced.toggle() } } label: {
                         HStack {
-                            Text(String(localized: "add.advanced"))
-                                .foregroundStyle(.primary)
+                            Text(String(localized: "add.advanced")).foregroundStyle(.primary)
                             Spacer()
                             Image(systemName: showAdvanced ? "chevron.up" : "chevron.down")
-                                .foregroundStyle(.secondary)
-                                .font(.caption)
+                                .foregroundStyle(.secondary).font(.caption)
                         }
                     }
                     if showAdvanced {
-                        currencyField(String(localized: "add.down.payment.optional"), text: $downPayment)
+                        CurrencyTextField(label: String(localized: "add.down.payment.optional"), value: $downPayment)
                         HStack {
                             TextField(String(localized: "add.monthly.rate.optional"), text: $monthlyRatePercent)
                                 .keyboardType(.decimalPad)
                             if monthlyRatePercent.isEmpty {
                                 Text(String(localized: "add.monthly.rate.zero.hint"))
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
+                                    .font(.caption).foregroundStyle(.tertiary)
                             }
                         }
                     }
@@ -155,25 +125,10 @@ struct AddFinancingView: View {
                     Button(String(localized: "action.cancel")) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "action.save")) { save() }
-                        .disabled(!isValid)
+                    Button(String(localized: "action.save")) { save() }.disabled(!isValid)
                 }
             }
         }
-    }
-
-    @ViewBuilder
-    private func currencyField(_ label: String, text: Binding<String>) -> some View {
-        TextField(label, text: text)
-            .keyboardType(.decimalPad)
-    }
-
-    private func doubleValue(_ s: String) -> Double {
-        Double(s.replacingOccurrences(of: ",", with: ".")) ?? 0
-    }
-
-    private func intValue(_ s: String) -> Int {
-        Int(s) ?? 0
     }
 
     private func save() {
@@ -182,10 +137,10 @@ struct AddFinancingView: View {
             carName: carName,
             licensePlate: licensePlate,
             bank: bank,
-            vehicleValue: doubleValue(vehicleValue),
-            downPayment: doubleValue(downPayment),
-            monthlyRate: rate,
-            installmentAmount: instAmount,
+            vehicleValue: vehicleValue,
+            downPayment: downPayment,
+            monthlyRate: (Double(monthlyRatePercent.replacingOccurrences(of: ",", with: ".")) ?? 0) / 100,
+            installmentAmount: installmentValue,
             totalInstallments: total,
             firstDueDate: firstDueDate,
             alreadyPaidCount: alreadyPaid,

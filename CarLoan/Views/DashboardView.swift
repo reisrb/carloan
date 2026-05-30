@@ -262,13 +262,13 @@ private struct QuickPaySheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var paidDate = Date()
-    @State private var paidAmountText: String
+    @State private var paidAmount: Double
     @State private var note = ""
 
     init(installment: Installment, onConfirm: @escaping (Date, Double, String?) -> Void) {
         self.installment = installment
         self.onConfirm = onConfirm
-        _paidAmountText = State(initialValue: String(format: "%.2f", installment.amount))
+        _paidAmount = State(initialValue: installment.amount)
     }
 
     var body: some View {
@@ -276,8 +276,7 @@ private struct QuickPaySheet: View {
             Form {
                 Section {
                     DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
-                    TextField(String(localized: "detail.paid.amount"), text: $paidAmountText)
-                        .keyboardType(.decimalPad)
+                    CurrencyTextField(label: String(localized: "detail.paid.amount"), value: $paidAmount)
                     TextField(String(localized: "detail.note.optional"), text: $note)
                 }
                 Section {
@@ -294,8 +293,7 @@ private struct QuickPaySheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "action.save")) {
-                        let amount = Double(paidAmountText.replacingOccurrences(of: ",", with: ".")) ?? installment.amount
-                        onConfirm(paidDate, amount, note.isEmpty ? nil : note)
+                        onConfirm(paidDate, paidAmount, note.isEmpty ? nil : note)
                     }
                 }
             }

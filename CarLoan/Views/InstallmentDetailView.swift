@@ -15,7 +15,7 @@ struct InstallmentDetailView: View {
 
     // Pay form
     @State private var paidDate = Date()
-    @State private var paidAmountText = ""
+    @State private var paidAmount: Double = 0
     @State private var note = ""
 
     var body: some View {
@@ -30,7 +30,7 @@ struct InstallmentDetailView: View {
                         paymentCard(payment)
                     } else {
                         Button {
-                            paidAmountText = String(format: "%.2f", installment.amount)
+                            paidAmount = installment.amount
                             showMarkAsPaid = true
                         } label: {
                             Label(String(localized: "detail.mark.paid"), systemImage: "checkmark.circle")
@@ -149,8 +149,7 @@ struct InstallmentDetailView: View {
             Form {
                 Section {
                     DatePicker(String(localized: "detail.paid.date"), selection: $paidDate, displayedComponents: .date)
-                    TextField(String(localized: "detail.paid.amount"), text: $paidAmountText)
-                        .keyboardType(.decimalPad)
+                    CurrencyTextField(label: String(localized: "detail.paid.amount"), value: $paidAmount)
                     TextField(String(localized: "detail.note.optional"), text: $note)
                 }
             }
@@ -162,7 +161,7 @@ struct InstallmentDetailView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "action.save")) {
-                        let amount = Double(paidAmountText.replacingOccurrences(of: ",", with: ".")) ?? installment.amount
+                        let amount = paidAmount > 0 ? paidAmount : installment.amount
                         vm?.markAsPaid(installment: installment, paidDate: paidDate, paidAmount: amount, note: note)
                         showMarkAsPaid = false
                         showReceiptSuggestion = true
