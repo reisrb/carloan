@@ -33,12 +33,14 @@ struct AddFinancingView: View {
     }
 
     var body: some View {
+        let selectedPhoto = carPhoto
+
         NavigationStack {
             Form {
                 Section(String(localized: "add.section.vehicle")) {
                     HStack(spacing: 14) {
                         PhotosPicker(selection: $photoItem, matching: .images) {
-                            if let photo = carPhoto {
+                            if let photo = selectedPhoto {
                                 Image(uiImage: photo)
                                     .resizable().scaledToFill()
                                     .frame(width: 72, height: 72)

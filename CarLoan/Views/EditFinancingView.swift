@@ -29,18 +29,21 @@ struct EditFinancingView: View {
     private var isValid: Bool { !carName.isEmpty }
 
     var body: some View {
+        let selectedPhoto = carPhoto
+        let currentSavedPhotoFilename = savedPhotoFilename
+
         NavigationStack {
             Form {
                 Section(String(localized: "add.section.vehicle")) {
                     // Photo picker
                     HStack(spacing: 14) {
                         PhotosPicker(selection: $photoItem, matching: .images) {
-                            if let photo = carPhoto {
+                            if let photo = selectedPhoto {
                                 Image(uiImage: photo)
                                     .resizable().scaledToFill()
                                     .frame(width: 72, height: 72)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                            } else if let filename = savedPhotoFilename,
+                            } else if let filename = currentSavedPhotoFilename,
                                       let img = ImageStorageService.load(filename: filename) {
                                 Image(uiImage: img)
                                     .resizable().scaledToFill()
