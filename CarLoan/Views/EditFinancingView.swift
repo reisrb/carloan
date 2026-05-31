@@ -60,7 +60,7 @@ struct EditFinancingView: View {
                             }
                         }
                         .onChange(of: photoItem) { _, item in
-                            Task {
+                            Task { @MainActor in
                                 if let data = try? await item?.loadTransferable(type: Data.self),
                                    let img = UIImage(data: data) {
                                     carPhoto = img

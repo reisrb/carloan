@@ -1,4 +1,4 @@
-name: iOS starter workflow
+name: iOS CI
 
 on:
   push:
@@ -6,9 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    name: Build and Test default scheme using any available iPhone simulator
+    name: build-and-test
     runs-on: macos-latest
 
     steps:
