@@ -29,7 +29,7 @@ struct SettingsView: View {
                     if notifStatus != .authorized && notifStatus != .provisional {
                         Button(String(localized: "settings.request.permission")) {
                             Task {
-                                await NotificationService.requestPermission()
+                                _ = await NotificationService.requestPermission()
                                 await refreshNotifStatus()
                                 rescheduleNotifications()
                             }
@@ -87,8 +87,12 @@ struct SettingsView: View {
 
     @MainActor
     private func refreshNotifStatus() async {
-        let settings = await UNUserNotificationCenter.current().notificationSettings()
-        notifStatus = settings.authorizationStatus
+        let authorizationStatus = await withCheckedContinuation { continuation in
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                continuation.resume(returning: settings.authorizationStatus)
+            }
+        }
+        notifStatus = authorizationStatus
     }
 
     private func exportData() {
