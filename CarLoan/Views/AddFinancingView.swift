@@ -33,12 +33,14 @@ struct AddFinancingView: View {
     }
 
     var body: some View {
+        let selectedPhoto = carPhoto
+
         NavigationStack {
             Form {
                 Section(String(localized: "add.section.vehicle")) {
                     HStack(spacing: 14) {
                         PhotosPicker(selection: $photoItem, matching: .images) {
-                            if let photo = carPhoto {
+                            if let photo = selectedPhoto {
                                 Image(uiImage: photo)
                                     .resizable().scaledToFill()
                                     .frame(width: 72, height: 72)
@@ -52,7 +54,7 @@ struct AddFinancingView: View {
                             }
                         }
                         .onChange(of: photoItem) { _, item in
-                            Task {
+                            Task { @MainActor in
                                 if let data = try? await item?.loadTransferable(type: Data.self),
                                    let img = UIImage(data: data) {
                                     carPhoto = img

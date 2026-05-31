@@ -78,3 +78,14 @@ CarLoan/
 3. Update `CarLoanApp.swift` to use `SchemaV2.models`
 
 Existing user data is preserved automatically for lightweight migrations (new fields with defaults).
+
+## Contribution policy
+
+- `main` is intended to stay protected.
+- Direct changes should go through a branch and pull request.
+- The repository owner (`@reisrb`) is the code owner for the repository.
+- Configure GitHub branch protection/rulesets for `main` to require:
+  - a pull request before merge;
+  - the `build-and-test` check from the `iOS CI` workflow to pass;
+  - code owner review when needed;
+  - restricted direct pushes to the repository owner only.
