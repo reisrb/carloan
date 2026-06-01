@@ -26,7 +26,7 @@ enum PDFExporter {
             let title = financing.carName
             let titleAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.boldSystemFont(ofSize: 20),
-                .foregroundColor: UIColor.label
+                .foregroundColor: UIColor.black
             ]
             title.draw(at: CGPoint(x: margin, y: y), withAttributes: titleAttrs)
             y += 30
@@ -35,7 +35,7 @@ enum PDFExporter {
             let subtitle = financing.bank
             let subtitleAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 14),
-                .foregroundColor: UIColor.secondaryLabel
+                .foregroundColor: UIColor.darkGray
             ]
             subtitle.draw(at: CGPoint(x: margin, y: y), withAttributes: subtitleAttrs)
             y += 24
@@ -53,7 +53,7 @@ enum PDFExporter {
             ]
             let bodyAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 12),
-                .foregroundColor: UIColor.label
+                .foregroundColor: UIColor.black
             ]
             for line in summaryLines {
                 line.draw(at: CGPoint(x: margin, y: y), withAttributes: bodyAttrs)
@@ -68,7 +68,7 @@ enum PDFExporter {
                            String(localized: "pdf.status")]
             let headerAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.boldSystemFont(ofSize: 10),
-                .foregroundColor: UIColor.label
+                .foregroundColor: UIColor.black
             ]
             for (i, h) in headers.enumerated() {
                 h.draw(at: CGPoint(x: colX[i], y: y), withAttributes: headerAttrs)
@@ -77,7 +77,7 @@ enum PDFExporter {
 
             let rowAttrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 9),
-                .foregroundColor: UIColor.label
+                .foregroundColor: UIColor.black
             ]
             let df = DateFormatter()
             df.dateStyle = .short

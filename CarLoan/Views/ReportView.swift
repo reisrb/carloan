@@ -108,7 +108,7 @@ struct ReportView: View {
 
     private func exportAsImage() {
         exportFormat = nil
-        let renderer = ImageRenderer(content: ReportSnapshotView(financing: financing))
+        let renderer = ImageRenderer(content: ReportSnapshotView(financing: financing).environment(\.colorScheme, .light))
         renderer.scale = 3
         if let img = renderer.uiImage {
             shareItems = [img]
@@ -174,7 +174,7 @@ private struct ReportSnapshotView: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(24)
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .frame(width: 360)
     }
 }
